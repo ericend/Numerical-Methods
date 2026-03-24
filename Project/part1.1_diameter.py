@@ -107,7 +107,9 @@ def main():
     def f_prime(d):
         return -g_prime(d) / g(d) ** 2
 
-    results: NewtonRaphsonResult = NewtonRaphson(f, f_prime, d_0, tolerance, 100)
+    results: NewtonRaphsonResult = NewtonRaphson(
+        f=f, f_prime=f_prime, x0=d_0, tolerance=tolerance, max_iterations=100
+    )
     print(f"Converged on: {results.final_x}")
 
     # [PLOT_START]
