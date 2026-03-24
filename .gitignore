@@ -1,0 +1,31 @@
+# Virtual environment
+venv/
+.venv/
+env/
+
+# Python cache
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Jupyter
+.ipynb_checkpoints/
+
+# Environment variables (keep secrets out of git!)
+.env
+.env.local
+
+# OS files
+.DS_Store        # Mac
+Thumbs.db        # Windows
+
+# IDE/editor files
+.vscode/
+.idea/
+*.swp            # vim swap files
+
+# Distribution/packaging
+dist/
+build/
+*.egg-info/
