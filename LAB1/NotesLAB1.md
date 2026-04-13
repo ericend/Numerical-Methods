@@ -84,15 +84,15 @@ Börja med **naiva ansatzen**: p1(t) = c0 + c1t + c2t2 + ···
     Plot & print results.
 
 
-    **Centered ansatz** \
+**Centered ansatz** 
     Samma sätt som ovan men med tau = t - t_medel
     
-    **Newton ansatz**
+**Newton ansatz**
     skapa divided_diff(), använd algoritm från Sauer p146. program3.1. 
         Basically gör vi rekursivt:
             $\frac{y_i - y_{n-1}}{x_i - x_{{n-1}}}$
     
-    def sedan newton_interpolation_matrix(), vilket i stort sett är en Vandermonde matrix med newton bas.
+def sedan newton_interpolation_matrix(), vilket i stort sett är en Vandermonde matrix med newton bas.
     Sedan på samma sätt som innan löser vi systemet, plottar och beräknar SSE.
 
 ### b)
@@ -114,12 +114,12 @@ def least_square_polynomial()
     använd funktionen för att lösa för a
     plottar för båda polynomgraderna.
 
-    Gör om samma sak fast för trig-bas 
+Gör om samma sak fast för trig-bas 
 
-    Resultaten visar att en Vandermonde matris (med baser <1, t, t², ..., t>) 
-    kan ge ett väldigt illa konditionerat system (fel förstärks väldigt mkt) pga basernas stora skalskillnader och att de kan vara linjärt oberoende (icke ON-bas).
+Resultaten visar att en Vandermonde matris (med baser <1, t, t², ..., t>) 
+kan ge ett väldigt illa konditionerat system (fel förstärks väldigt mkt) pga basernas stora skalskillnader och att de kan vara linjärt oberoende (icke ON-bas).
 
-    Medan med trig bas är storleksordningen på samtliga baser [-1, 1]
+Medan med trig bas är storleksordningen på samtliga baser [-1, 1]
 
 ### f)
 
