@@ -1,0 +1,332 @@
+# Lab 1
+
+## 1 Balkböjning - Icke Linjär eq
+
+### a)
+**Q:** 
+Sätt L = 1 och ta reda på hur många nollställen ekvation (1) har på intervallet 0 < x < L
+genom att rita upp funktionen i Python.
+
+**A:**
+Definiera funktioner för balkböjning och dx. \
+Spänn upp x och y arrayer för plotting\
+Sortera ut nollställen från x.\
+Plotta y(x) med linjer vid nollställen. \
+
+### b)
+**Q:**
+Vilket eller vilka av nollställen kan bestämmas med *fixpunktsiteration*?
+
+**A:**
+Definiera g', spänn upp x pss som innan. \
+Plotta g'(x) och rita ut nollställen. \
+Highlighta områden där c < 1 enligt teorin.\
+Printa huruvida nollställena i a) konvergerar eller inte (dvs om c <1 i det område de ligger i).\
+Nollställen i dessa områden kan bestämmas med fixpunksiteration enligt teorin.
+
+### c)
+
+**Q:**
+Skriv ett Python-program som beräknar ett av de nollställen på intervallet 0 < x < L
+för vilka fixpunktsmetoden konvergerar.
+
+**A:**
+Definiera en databehållare (@dataclass).\
+Definiera en fixedpointiteration funktion som löser ekvationen\
+för någon funktion givet en funktion, en initialgissning och en tolerans.\
+Använd funktionen i uppgiftssbeskrivningen.\
+Programmet skriver ut en tabell som visar hur metoden konvergerar mot "x_2* = 0.842384238424"
+
+
+### d)
+ **Q:**
+ Utöka Python-programmet ovan så att det beräknar ett av nollställena på intervallet
+0 < x < L till (1) med hjälp av Newtons metod. Välj ett nollställe som inte går att
+bestämma med fixpunktsmetoden.
+Programmet ska ha en utskrift som visar hur metoden konvergerar till nollstället samt
+returnera ett svar med ett fel som är mindre än en given tolerans τ = 10−10. Använd
+lämpligt avbrottsvillkor för att säkerställa detta
+
+**A:**
+Definiera en databehållare (@dataclass).\
+NewtonRaphson funktion.\
+Gör en init guess baserat på grafen från förut.\
+NewtonRaphson konvergerar mycket fortare än fixpunktsiteration ty kvadratisk konvergens: $|e_{n+1}| \approx C \cdot |e_n|²$\
+medans fixedpointiteration är linjär.
+
+
+### e)
+välj **x_2\* = 0.842384238424** som mål. använd init gissning x_0 = 0.7.\
+Återanvänd båda funktionerna från ovan. \
+NewtonRaphson har kvadratisk konvergens medans fixedpointiteration har linjär.
+
+
+## 2 Solens upp- och nedgång
+
+### a)
+spänn upp soldatadata och tidsvektorer (12 datapunkter ger 12 - 1 = 11 termer.)\
+def SSE och plot funktioner\
+Börja med **naiva ansatzen**: p1(t) = c0 + c1t + c2t2 + ···\
+    Ta fram polynomcoefficienter genom att lösa systemet: Ax=b mha:    
+    Vandermonde matris: 
+        $$
+        \begin{equation}
+        V = \begin{bmatrix}
+        1 & t_1 & t_1^2 & \cdots & t_1^{n-1} \\
+        1 & t_2 & t_2^2 & \cdots & t_2^{n-1} \\
+        \vdots & \vdots & \vdots & \ddots & \vdots \\
+        1 & t_n & t_n^2 & \cdots & t_n^{n-1}
+        \end{bmatrix}
+        \end{equation}
+        $$
+    Skapa polynom med koeff. med poly.polynomial()\
+    Beräkna värdet av polynomet för alla t\
+    beräkna residualen y - ŷ\
+    beräkna SSE.\
+    Plot & print results.\
+
+
+**Centered ansatz** \
+    Samma sätt som ovan men med tau = t - t_medel
+    
+**Newton ansatz**\
+    skapa divided_diff(), använd algoritm från Sauer p146. program3.1. \
+        Basically gör vi rekursivt:
+            $\frac{y_i - y_{n-1}}{x_i - x_{{n-1}}}$
+    
+def sedan newton_interpolation_matrix(), vilket i stort sett är en Vandermonde matrix med newton bas.\
+    Sedan på samma sätt som innan löser vi systemet, plottar och beräknar SSE.
+
+$p(x^*) = a_0 + a_1(x^* - x_0) + a_2(x^* - x_0)(x^* - x_1)+ \dots + a_{n-1}(x^* - x_0)\cdots(x^* - x_{n-2})$
+
+### b)
+Beräkna sedan konditionstal K ( Sauer p50: "The condition number of a problem is deﬁned to be the
+maximum error magniﬁcation over all input changes"))
+
+Alla tre metoder (Naiv / Centrerad / Newton) spänner upp samma polynomrum men använder olika bas vilket avgör hur känsligt systemet är för störningar:\
+**Naiv**:     höga potenser av t på intervallet [1,12] -> dåligt konditionerad\
+**Centrerad**: tau = t - t_m -> mindre värden -> bättre\
+**Newton**:   lower triangular -> bäst konditionerad
+
+konditionstalet är alltså ett mått på det.
+
+
+### c.d.e)
+def least_square_polynomial()\
+    vi skapar essentiellt en Vandermonde-matris för att lösa minsta-kvadrat problemet för polynomen. -> polynombas\
+    spänn upp datasets apr_aug och t_1\
+    använd funktionen för att lösa för a\
+    plottar för båda polynomgraderna.
+
+Gör om samma sak fast för trig-bas 
+
+Resultaten visar att en Vandermonde matris (med baser <1, t, t², ..., t>) 
+kan ge ett väldigt illa konditionerat system (fel förstärks väldigt mkt) pga basernas stora skalskillnader och att de kan vara linjärt beroende (icke ON-bas).
+
+Medan med trig bas är storleksordningen på samtliga baser [-1, 1]
+
+### f)
+
+**Runges fenomen:**\
+interpolera ett polynom av hög grad på jämnt fördelade punkter $ \Rightarrow $ kraftiga svängningar vid ändpunkterna. 
+
+## 3 - Effekt från solceller
+
+### a) 
+Använder "Composite Trapezoid Rule" från Sauer p.260\
+Fungerar enligt test
+
+### b)
+
+Beräkna exakta värdet av integralen.\
+Datacontainer\
+Spänn upp stegvektor\
+Använd trapets.py och beräkna approximationen för varje steg.
+
+Beräkna p enligt:
+**Härledning av log_2 förenkling:**
+
+Antag att felet $e(h)$ beter sig som
+$e(h) \approx C h^p$
+där $h$ är steglängden och $p$ är konvergensordningen.
+
+Antag nu att vi skalar med en faktor $r > 1$, så att
+
+$
+h_{k+1} = \frac{h_k}{r}.
+$
+
+Då gäller
+
+$
+e_k \approx C h_k^p, \qquad e_{k+1} \approx C h_{k+1}^p
+= C \left(\frac{h_k}{r}\right)^p
+= C h_k^p r^{-p}.
+$
+
+Kvoten mellan felen blir:
+
+$\frac{e_k}{e_{k+1}}
+\approx
+\frac{C h_k^p}{C h_k^p r^{-p}}
+= r^p.$
+
+löser ut $p$ genom att ta logaritmen:
+$\log\!\left(\frac{e_k}{e_{k+1}}\right)
+\approx
+\log(r^p)
+= p \log(r),$
+$\implies$ $p
+\approx
+\frac{\log\!\left(\dfrac{e_k}{e_{k+1}}\right)}{\log(r)}$.
+
+I det vanliga fallet där vi halverar steglängden, $h_{k+1} = h_k/2$, har vi $r = 2$ och får
+$p \approx \frac{\log\!\left(\dfrac{e_k}{e_{k+1}}\right)}{\log(2)}=
+\log_2\!\left(\frac{e_k}{e_{k+1}}\right)
+$
+
+---
+
+Printa tabell.\
+Tabell visar konvergens med minskande steglängd och ett p-värde som går mot 2.\
+$p \approx 2$ innebär konvergensordning 2 och en halvering av steglängden $\implies$ felet blir 4ggr mindre. $e(h/2) \approx C\left(\frac{h}{2}\right)² \approx \frac{1}{4}e(h)$ 
+
+
+### c)
+Sätt h=1 (öka med ett år i taget)\
+Gör styckvis linjär interpolation med def f_solar_cells() av datan.\
+Approximera integralen med trapets.py och interpolationen
+
+
+### d)
+lista för antal intervall\
+sätt upp databehållare\
+kör trapets.py för varje intervall\
+Finns inget fel att jämföra med vid första iterationen, sätt nan\
+beräkna konvergensordning enligt ovan igen\
+printa tabell
+
+Tabellen visar att konvergensordningen är $p \approx 2$ vilket stämmer med teorin $p = 2$\
+Halverar h ger en felminskning på ungefär en faktor 4.
+**Stämmer väl med teorin!**
+
+### e)
+Extrapolera med Richardson Sauer p249 (5.15)\
+Extrapolera med Simpsons Sauer p257 (5.22)
+
+De ger samma resultat!
+
+
+### f)
+Modellen säger att vid $t=2014$ gäller att $f=a$.\
+linjärisera f(t) genom att ta logaritmen, substituera:
+x = t - 2014
+f(x) = log av datan, pss som ovan.
+
+lös på vanligt vis med Vandermonde matris och minsta kvadr. metoden\
+transformera tillbaks från log till vanligt med exp(ln_a)
+
+### g)
+definiera exponentiell modellen\
+beräkna värdet för det nya året (2023)\
+appenda till listorna\
+approximera med trapets.py\
+printa\
+**JA** villkoret är uppfyllt.
+
+# LAB 2
+
+## F1)
+
+### a)
+Spänn upp rummet $t \isin [0, 1.2]$
+Skapa meshgrid av rummet \
+definiera riktningsvektor(er) för rummet\
+def analytisk lösning\
+plotta
+
+### b)
+databehållare \
+def euler_forward lösare: Sauer p284 (6.7)
+
+### c)
+Verifiera lösning: \
+definiera ODE \
+def exakt lösning \
+initvärde, domän och steglängd \
+lös mha lösare från b) \
+plotta \
+stämmer enligt lydning
+
+## F2) 
+
+### a) & b)
+lös ODE för samtliga steglängder och spara resultat i lista \
+plotta varje lösn. \
+Mindre steglängd resulterar i mindre fel och approximationen blir bättre och bättre \
+Rimligt med tanke på att vi "håller oss närmre" kurvan \
+Vi ser från resultaten att största felet halveras vid halvering av steglängd och sista felet stämmer överrens med lydning. 
+
+### c)
+Beräkna igen pss som i b) (sjukt onödigt men läsbart) \
+beräkna konvergensordning p enligt formel, h halveras så log bas 2\
+$p \approx 1 \implies$ linjär konvergens. \
+Stämmer exakt med lydning \
+
+## T1)
+
+### a)
+Subs. och skriv om till första ordningens ODE.\
+Gör om till vektorform. \
+
+### b)
+def ODE för T1a som returnerar vektorn för kretsekvationerna.
+
+### c)
+dataklass för kretsstorheter. \
+lös för respektive krets mha solve_ivp och ODE-funktionen från ovan. \
+Plotta.\
+odämpade oscillerar oändligt medans den dämpade avtar som förväntat \
+ström och laddning ur fas $\frac{\pi}{2}$ som förväntat då RLC-krets (den ena peakar då den andra är min och vice versa.).
+
+### d)
+Lös kretsekvationerna för olika antal tidssteg.\
+plotta alla på samma graf. \
+Fler tidssteg ger bättre resultat, rimligt med tanke på att vi tar mindre steg enligt $h = T / N$ så större N ger mindre steg som ger bättre noggrannhet.\
+Vi ser väldigt tydligt att på denna domär så är alla utom N=20 stabila. \
+Men om vi ökar domänen, ser vi att de andra också är instabila. \
+Vilket är typiskt för Eulers metod då små numeriska fel växer exponentiellt.
+
+### e)
+pss som i F2 och printa tabellen,\
+Tabellen visar att felet för laddningen är konsekvent medans halvering av steglängd h ger ungefärlig halvering av strömfel, dvs linjär trend konsekvent med $p \approx 1$.
+
+## T2)
+Vi har ett statiskt värmeledningsproblem.
+
+### a)
+Finite difference formula Sauer p358 (7.12) \
+Ställ upp systemet och applicera randvillkor,\
+översätt till matrisform. \
+
+
+### b)
+Notera strukturen och att randvillkoren dyker upp i första respektive sista raden. \
+Detta ger oss den generall strukturen på systemmatrisen med -2 på huvuddiagonalen och 1 på sub- och superdiagonlarna.
+
+### c)
+def diskretisering_temperatur\
+Från input skapar vi systemmatrisen A och mha analytiska källfunktionen beräknar vi b för varje delsteg x.\
+funktionen returnerar matrisen A och b.\
+printar A och b som stämmer med lydning.
+
+### d)
+använder diskretisering_temperatur för att få A och b.\
+spänn upp T och x, appenda randvärden.\
+print & plott med annotering för x = 0.2.
+
+### e)
+Konvergenmsstudien visar att approximation konvergerar mot referensvärdet vid större N / mindre steglängd.\
+felet minskar också med en faktor $\frac{1}{4}$ i enlighet med $p \approx 2$
+
+### f)
