@@ -1,4 +1,16 @@
-# strip_plots.py
+"""
+Strip plotting code from Python files.
+
+This script processes Python files in the current directory, removing:
+- Code blocks marked with # [PLOT_START] and # [PLOT_END] comments
+- Imports of matplotlib and plotly libraries
+- Excess blank lines (more than 2 consecutive newlines)
+
+The cleaned files are saved to an 'Appendix' subdirectory, useful for
+creating versions of scripts without plotting dependencies for submission
+or archival purposes.
+"""
+
 import pathlib
 import re
 

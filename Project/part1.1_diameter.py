@@ -1,80 +1,14 @@
 """
-SF1546 – Project VT2026
+SF1546 - Project VT2026
 24/3/2026
 Group 41
 """
-
-from dataclasses import dataclass
-from typing import Callable
 
 import matplotlib.pyplot as plt
 import matplotlib.ticker as ticker
 import numpy as np
 import scipy.optimize as opt
-
-
-@dataclass
-class NewtonRaphsonResult:
-    fs: list[float]
-    xs: list[float]
-    ns: list[int]
-    deltas: list[float]
-    final_x: float
-    converged: bool
-
-
-def NewtonRaphson(
-    f: Callable,
-    f_prime: Callable,
-    x0: float,
-    tolerance: float,
-    max_iterations: int,
-) -> NewtonRaphsonResult:
-    """
-    Newton-Raphson method to find a root of f starting from x0.
-    Args:
-        f: One variable function f(x)
-        f_prime: Derivative of f
-        x0: initial guess
-        tolerance: convergence tolerance on |f(x)|
-        max_iterations: maximum number of iterations
-    Returns:
-        Dataclass containing approximations, residuals, deltas, and iteration counts
-    """
-    ns: list[int] = []
-    fs: list[float] = []
-    xs: list[float] = []
-    deltas: list[float] = []
-
-    x = x0
-    n = 0
-    fx = f(x)
-
-    xs.append(x)
-    fs.append(fx)
-    deltas.append(float("inf"))
-    ns.append(n)
-
-    converged = abs(fx) <= tolerance
-
-    while abs(fx) > tolerance and n < max_iterations:
-        n += 1
-        df = f_prime(x)
-        x_new = x - (fx / df)
-        DeltaX = np.abs(x_new - x)
-        x = x_new
-        fx = f(x)
-
-        fs.append(fx)
-        ns.append(n)
-        xs.append(x)
-        deltas.append(DeltaX)
-
-    converged = abs(fx) <= tolerance
-
-    return NewtonRaphsonResult(
-        fs=fs, xs=xs, deltas=deltas, ns=ns, final_x=x, converged=converged
-    )
+from utils import NewtonRaphson, NewtonRaphsonResult
 
 
 def main():
