@@ -1,25 +1,43 @@
 from typing import Callable
+
 import numpy as np
-from .structures import NewtonRaphsonResult, FixedPointResult, EulerResult
+
+from .structures import (
+    EulerResult,
+    FixedPointResult,
+    NewtonRaphsonResult,
+    NewtonSystemResult,
+)
 
 
 def NewtonRaphson(
-    f: Callable,
-    f_prime: Callable,
+    f: Callable[[float], float],
+    f_prime: Callable[[float], float],
     x0: float,
     tolerance: float,
     max_iterations: int,
 ) -> NewtonRaphsonResult:
     """
-    Newton-Raphson method to find a root of f starting from x0.
-    Args:
-        f: One variable function f(x)
-        f_prime: Derivative of f
-        x0: initial guess
-        tolerance: convergence tolerance on |f(x)|
-        max_iterations: maximum number of iterations
-    Returns:
-        Dataclass containing approximations, residuals, deltas, and iteration counts
+    Newton–Raphson method to find a root of a scalar function f starting from x0.
+
+    Parameters
+    ----------
+    f : Callable[[float], float]
+        Scalar function f(x).
+    f_prime : Callable[[float], float]
+        Derivative f'(x) of the function f.
+    x0 : float
+        Initial guess for the root.
+    tolerance : float
+        Convergence tolerance on |f(x_k)|.
+    max_iterations : int
+        Maximum allowed number of iterations.
+
+    Returns
+    -------
+    NewtonRaphsonResult
+        Result container with iterates x_k, residuals f(x_k), step sizes Δx_k,
+        iteration indices, final iterate, and convergence flag.
     """
     ns: list[int] = []
     fs: list[float] = []
@@ -32,7 +50,7 @@ def NewtonRaphson(
 
     xs.append(x)
     fs.append(fx)
-    deltas.append(float("inf"))
+    deltas.append(float("inf"))  # placeholder for initial step
     ns.append(n)
 
     converged = abs(fx) <= tolerance
@@ -40,21 +58,31 @@ def NewtonRaphson(
     while abs(fx) > tolerance and n < max_iterations:
         n += 1
         df = f_prime(x)
-        x_new = x - (fx / df)
-        DeltaX = np.abs(x_new - x)
+        if df == 0:
+            # Derivative zero → Newton step undefined
+            break
+
+        x_new = x - fx / df
+        delta_x = float(np.abs(x_new - x))
         x = x_new
         fx = f(x)
 
-        fs.append(fx)
-        ns.append(n)
         xs.append(x)
-        deltas.append(DeltaX)
+        fs.append(fx)
+        deltas.append(delta_x)
+        ns.append(n)
 
     converged = abs(fx) <= tolerance
 
     return NewtonRaphsonResult(
-        fs=fs, xs=xs, deltas=deltas, ns=ns, final_x=x, converged=converged
+        fs=fs,
+        xs=xs,
+        deltas=deltas,
+        ns=ns,
+        final_x=x,
+        converged=converged,
     )
+
 
 def fixed_point_iteration(
     g: Callable[[float], float],
@@ -62,36 +90,52 @@ def fixed_point_iteration(
     tolerance: float,
     max_iterations: int,
 ) -> FixedPointResult:
+    """
+    Fixed-point iteration to solve x = g(x) starting from x0.
+
+    Parameters
+    ----------
+    g : Callable[[float], float]
+        Iteration function g(x) whose fixed point is sought.
+    x0 : float
+        Initial guess for the fixed point.
+    tolerance : float
+        Convergence tolerance on the step size |x_{k+1} - x_k|.
+    max_iterations : int
+        Maximum allowed number of iterations.
+
+    Returns
+    -------
+    FixedPointResult
+        Result container with iterates x_k, iteration indices, and step sizes Δx_k.
+
+    Raises
+    ------
+    RuntimeError
+        If the method does not converge within max_iterations.
+    """
     xs: list[float] = []
     ns: list[int] = []
     deltaX: list[float] = []
-    """
-    Fixed point iteration to find a fixed point of g starting from x0.
-    Args:
-        g: function for fixed point iteration
-        x0: initial guess
-        tolerance: convergence tolerance
-        max_iterations: maximum number of iterations
-    Returns:
-        FixedPointResult containing the list of approximations and iteration counts
-    Raises:
-        RuntimeError: if the method does not converge within max_iterations
-
-    """
 
     x = x0
-    DeltaX = float('inf')
+    DeltaX = float("inf")
     n = 0
 
+    # Log initial state
+    xs.append(x)
+    ns.append(n)
+    deltaX.append(DeltaX)
+
     while DeltaX > tolerance and n < max_iterations:
+        x_old = x
+        x = g(x_old)
+        DeltaX = float(np.abs(x - x_old))
+        n += 1
+
         xs.append(x)
         ns.append(n)
         deltaX.append(DeltaX)
-
-        xold = x
-        x = g(xold)
-        DeltaX = float(np.abs(x - xold))
-        n += 1
 
     if n >= max_iterations and DeltaX > tolerance:
         raise RuntimeError(
@@ -100,60 +144,52 @@ def fixed_point_iteration(
 
     return FixedPointResult(xs=xs, ns=ns, deltaX=deltaX)
 
+
 def euler_forward(
     f: Callable,
     y0: float | np.ndarray,
-    domain: list,
+    domain: list[float],
     h: float,
     *f_args,
     exact: Callable = None,  # type: ignore
 ) -> EulerResult:
     """
-    Solve ODE(s) y' = f(t,y) using Forward Euler method.
-    Supports both scalar ODEs f(t,y)→float and systems f(t,y)→np.ndarray.
+    Solve ODE(s) y' = f(t, y) using the Forward Euler method.
+
+    Supports both scalar ODEs and systems of ODEs.
 
     Parameters
     ----------
     f : Callable
-        ODE right-hand side:
-
-            Scalar: f(t: float, y: float) → float
-
-            Vector: f(t: float, y: np.ndarray, *f_args) → np.ndarray
+        Right-hand side of the ODE:
+            Scalar: f(t: float, y: float) -> float
+            Vector: f(t: float, y: np.ndarray, *f_args) -> np.ndarray
     y0 : float | np.ndarray
-        Initial condition. Scalar float or vector np.ndarray([q0, i0]).
-    domain : list[float, float]
-        Time interval [t_start, t_end]
+        Initial condition. Scalar float or vector np.ndarray([y1_0, ..., yN_0]).
+    domain : list[float]
+        Time interval [t_start, t_end].
     h : float
-        Time step size
+        Time step size.
     *f_args
-        Additional arguments passed to f() for vector ODEs (e.g., R, L, C for RLC)
-    exact : Callable[[np.ndarray], np.ndarray | float], optional
-        Exact solution y(t). Called as exact(t) where t is np.ndarray.
-
-            Scalar: → np.ndarray (n_steps,)
-
-            Vector: → np.ndarray (n_vars, n_steps)
-
+        Additional arguments passed to f(t, y, *f_args) for vector ODEs.
+    exact : Callable, optional
+        Exact solution y_exact(t). Called as exact(t) with t as np.ndarray.
+        Should return an array of the same shape as y.
 
     Returns
     -------
     EulerResult
-        Container with t, y (numerical), e_i (errors), y_exact
-
-    Notes
-    -----
-    - Automatically detects scalar vs vector ODE via np.isscalar(y0)
-    - Forward Euler: y_{n+1} = y_n + h * f(t_n, y_n)
+        Container with time grid t, numerical solution y, pointwise error e_i,
+        and exact solution y_exact (if provided).
     """
     t = np.arange(domain[0], domain[1] + h, h)
     is_scalar: bool = np.isscalar(y0)
-    
-    n_vars: int = 1 if is_scalar else len(y0)  # type:ignore
-    y: np.ndarray = np.zeros((len(t), n_vars))
-    y[0] = y0 if is_scalar else y0.copy()  # type:ignore
 
-    # Single step for scalar, vector step for systems
+    n_vars: int = 1 if is_scalar else len(y0)  # type: ignore
+    y: np.ndarray = np.zeros((len(t), n_vars))
+    y[0] = y0 if is_scalar else y0.copy()  # type: ignore
+
+    # Time stepping
     for i in range(len(t) - 1):
         f_val = f(t[i], y[i], *f_args) if f_args else f(t[i], y[i])
         y[i + 1] = y[i] + h * f_val
@@ -170,29 +206,40 @@ def euler_forward(
         y_exact = None
         e_i = np.zeros_like(y)
 
-    return EulerResult(t=t, y=y, e_i=e_i, y_exact=y_exact)  # type:ignore
+    return EulerResult(t=t, y=y, e_i=e_i, y_exact=y_exact)  # type: ignore
+
 
 def trapets(
-    f: Callable, n, boundaries: np.ndarray | list, return_h: bool = False
-) -> float | tuple:
+    f: Callable[[float], float],
+    n: int,
+    boundaries: np.ndarray | list[float],
+    return_h: bool = False,
+) -> float | tuple[float, float]:
     """
-    Approximates ∫_a^b f(x) dx with the composite trapezoid rule.
+    Approximate ∫_a^b f(x) dx using the composite trapezoidal rule.
 
-    :param f: function to integrate
-    :type f: Callable
-    :param n: intervals
-    :type n: int
-    :param boundaries: integration limits [a, b]
-    :type boundaries: np.ndarray | list
-    :return: Approximation of integral of f from a to b
-    :rtype: float
+    Parameters
+    ----------
+    f : Callable[[float], float]
+        Integrand f(x) to be integrated over [a, b].
+    n : int
+        Number of subintervals.
+    boundaries : array_like of float
+        Integration limits [a, b].
+    return_h : bool, optional
+        If True, also return the step size h.
+
+    Returns
+    -------
+    float or (float, float)
+        Approximation of the integral of f from a to b.
+        If return_h is True, returns (integral, h).
     """
-
     if n <= 0:
         raise ValueError("n has to be a positive integer")
 
     a, b = boundaries
-    h = (b - a) / n  # Step size
+    h = (b - a) / n
 
     x = np.linspace(a, b, n + 1)
     y = f(x)
@@ -203,3 +250,64 @@ def trapets(
         return result, h
     else:
         return result
+
+
+def newton_system(
+    F_func: Callable,
+    JF_func: Callable,
+    x0: np.ndarray,
+    tol: float,
+    max_iter: int,
+    args: tuple,
+) -> NewtonSystemResult:
+    """
+    Newton's method for systems of nonlinear equations.
+
+    At each iteration k, solves the linear system
+        JF(x_k) * δ = -F(x_k)
+    for the correction δ, then updates
+        x_{k+1} = x_k + δ,
+    until ||F(x_k)||_2 <= tol or the iteration limit is reached.
+
+    Parameters
+    ----------
+    F_func : Callable
+        Vector-valued function F(x, *args) returning np.ndarray of shape (n,).
+    JF_func : Callable
+        Jacobian function JF(x, *args) returning np.ndarray of shape (n, n).
+    x0 : np.ndarray
+        Initial guess vector x_0 ∈ ℝ^n (shape (n,)).
+    tol : float
+        Convergence tolerance on the 2-norm ||F(x_k)||_2.
+    max_iter : int
+        Maximum allowed number of iterations.
+    args : tuple
+        Additional parameters passed to F_func and JF_func.
+
+    Returns
+    -------
+    NewtonSystemResult
+        Result container with iterates x_k, residuals F(x_k),
+        final iterate x_*, and iteration indices.
+    """
+    x = x0.astype(float)
+    xs = [x.copy()]
+    Fx = F_func(x, *args)
+    Fs = [Fx]
+    ns = [0]
+
+    for k in range(max_iter):
+        if np.linalg.norm(Fx, ord=2) <= tol:
+            break
+
+        J = JF_func(x, *args)
+        delta = np.linalg.solve(J, -Fx)
+        x = x + delta
+
+        Fx = F_func(x, *args)
+
+        xs.append(x.copy())
+        Fs.append(Fx)
+        ns.append(k + 1)
+
+    return NewtonSystemResult(xs=xs, Fs=Fs, final_x=x, ns=ns)
