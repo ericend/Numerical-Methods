@@ -259,6 +259,7 @@ def newton_system(
     tol: float,
     max_iter: int,
     args: tuple,
+    jac_args: tuple | None = None,
 ) -> NewtonSystemResult:
     """
     Newton's method for systems of nonlinear equations.
@@ -274,7 +275,7 @@ def newton_system(
     F_func : Callable
         Vector-valued function F(x, *args) returning np.ndarray of shape (n,).
     JF_func : Callable
-        Jacobian function JF(x, *args) returning np.ndarray of shape (n, n).
+        Jacobian function JF(x, *jac_args) returning np.ndarray of shape (n, n).
     x0 : np.ndarray
         Initial guess vector x_0 ∈ ℝ^n (shape (n,)).
     tol : float
@@ -282,14 +283,16 @@ def newton_system(
     max_iter : int
         Maximum allowed number of iterations.
     args : tuple
-        Additional parameters passed to F_func and JF_func.
+        Additional parameters passed to F_func.
+    jac_args : tuple, optional
+        Additional parameters passed to JF_func. Defaults to args if not provided.
 
     Returns
     -------
     NewtonSystemResult
-        Result container with iterates x_k, residuals F(x_k),
-        final iterate x_*, and iteration indices.
     """
+    jac_args = jac_args if jac_args is not None else args
+
     x = x0.astype(float)
     xs = [x.copy()]
     Fx = F_func(x, *args)
@@ -300,7 +303,7 @@ def newton_system(
         if np.linalg.norm(Fx, ord=2) <= tol:
             break
 
-        J = JF_func(x, *args)
+        J = JF_func(x, *jac_args)
         delta = np.linalg.solve(J, -Fx)
         x = x + delta
 
