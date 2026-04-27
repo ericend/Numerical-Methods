@@ -24,19 +24,19 @@ results_path.mkdir(exist_ok=True)
 
 def main():
     # ============= Setup =============
-    Q: float = 801368  # Heat Flux [W]
-    Aex: float = 64.15  # Heat transfer area [m^2]
-    dTm: float = 29.6  # Mean temp. delta of the two fluids [°C]
-    Ds: float = 1.219  # Shell inner diameter [m]
+    Q: float = 801368  # Heat Flux
+    Aex: float = 64.15  # Heat transfer area
+    dTm: float = 29.6  # Mean temp. delta of the two fluids
+    Ds: float = 1.219  # Shell inner diameter
     # Material and Thermodynamic parameters:
-    Rfi: float = 1.76e-4  # [m^2·°C/W]
-    Rfo: float = 1.76e-4  # [m^2·°C/W]
-    hs: float = 356  # [W/m^2·°C]
-    ht: float = 356  # [W/m^2·°C]
-    kw: float = 60  # [W/m·°C]
+    Rfi: float = 1.76e-4
+    Rfo: float = 1.76e-4
+    hs: float = 356
+    ht: float = 356
+    kw: float = 60
 
     U_f: float = Q / (Aex * dTm)  # Heat transfer coefficient
-    d_0: float = 0.007  # Reference initial guess [m]
+    d_0: float = 0.007  # Reference initial guess
     tolerance: float = 1e-8
 
     def g(d) -> float:
@@ -199,7 +199,7 @@ def main():
     )
     ax1.set_xlabel(r"$d$ (mm)")
     ax1.set_ylabel(r"$f(d)$")
-    ax1.set_title(r"Root of $f(d)$ — Newton's Method")
+    ax1.set_title(r"Root of $f(d)$ - Newton's Method")
     ax1.legend(frameon=False)
     fig1.tight_layout()
     fig1.savefig(plot_dir / "outerdim_newton_roots.png", dpi=300, bbox_inches="tight")
@@ -207,7 +207,7 @@ def main():
     # ------------- Save convergence plot -------------
     ax_conv.set_xlabel(r"Iteration $k$")
     ax_conv.set_ylabel(r"$|f(d_k)|$")
-    ax_conv.set_title("Residual vs Starting Guess — Newton's Method")
+    ax_conv.set_title("Residual vs Starting Guess - Newton's Method")
     ax_conv.xaxis.set_major_locator(ticker.MultipleLocator(1))
     ax_conv.legend(frameon=False, fontsize="xx-small", loc="lower left")
     fig_conv.tight_layout()

@@ -36,7 +36,7 @@ def g(
 
 def g_d(d: float, Ds: float, ht: float, Rfi: float, kw: float) -> float:
     """
-    ∂g/∂d from the report:
+    dg/dd from the report:
         g_d = 1/(D_s h_t) + R_fi / D_s + (ln(d/D_s) + 1)/(2 k_w)
     """
     return 1.0 / (Ds * ht) + Rfi / Ds + (np.log(d / Ds) + 1.0) / (2.0 * kw)
@@ -133,30 +133,30 @@ def JF(
 def main() -> None:
     # ------------- Parameters -------------
     # Heat / thermo parameters
-    Q: float = 801_368.0  # Heat flux [W]
-    dTm: float = 29.6  # Mean temp. difference ΔT_m [°C]
-    dP_max: float = 49_080.0  # Max allowed pressure drop [Pa]
+    Q: float = 801_368.0  # Heat flux
+    dTm: float = 29.6  # Mean temp. difference
+    dP_max: float = 49_080.0  # Max allowed pressure drop
 
     # Material parameters
-    c: float = 0.389  # [W·s·m]
-    S_t: float = 0.016  # [m]
-    K_1: float = 0.249  # [m]
-    n_1: float = 2.207  # dimensionless
+    c: float = 0.389
+    S_t: float = 0.016
+    K_1: float = 0.249
+    n_1: float = 2.207
 
     # Thermal parameters / coefficients
-    Rfi: float = 1.76e-4  # [m^2·°C/W]
-    Rfo: float = 1.76e-4  # [m^2·°C/W]
-    hs: float = 356.0  # [W/m^2·°C]
-    ht: float = 356.0  # [W/m^2·°C]
-    kw: float = 60.0  # [W/m·°C]
+    Rfi: float = 1.76e-4
+    Rfo: float = 1.76e-4
+    hs: float = 356.0
+    ht: float = 356.0
+    kw: float = 60.0
 
     # Newton settings
     tol: float = 1e-8
     max_iter: int = 50
 
     # Initial guess for (d, Ds)
-    d0: float = 0.015  # [m]
-    Ds0: float = 0.8  # [m]
+    d0: float = 0.015
+    Ds0: float = 0.8
     x0 = np.array([d0, Ds0], dtype=float)
 
     # Pack parameters in the order F, JF expect

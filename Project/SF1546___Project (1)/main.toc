@@ -1,0 +1,19 @@
+\babel@toc {english}{}\relax 
+\contentsline {section}{\numberline {1}Introduction}{2}{section.1}%
+\contentsline {section}{\numberline {2}Method}{2}{section.2}%
+\contentsline {subsection}{\numberline {2.1}Part 1 -- Heat Exchanger}{2}{subsection.2.1}%
+\contentsline {subsubsection}{\numberline {2.1.1}Newton's Method for a Non-Linear Equation}{3}{subsubsection.2.1.1}%
+\contentsline {subsubsection}{\numberline {2.1.2}Newton's Method for a Non-linear System of Equations}{3}{subsubsection.2.1.2}%
+\contentsline {subsection}{\numberline {2.2}Part 2 - Heat Sinks}{5}{subsection.2.2}%
+\contentsline {subsubsection}{\numberline {2.2.1}Approximating the static heat equation}{5}{subsubsection.2.2.1}%
+\contentsline {subsubsection}{\numberline {2.2.2}Solving the System}{6}{subsubsection.2.2.2}%
+\contentsline {section}{\numberline {3}Results}{6}{section.3}%
+\contentsline {subsection}{\numberline {3.1}Part 1 -- Heat Exchanger}{6}{subsection.3.1}%
+\contentsline {subsubsection}{\numberline {3.1.1}Numerical Solution of non-linear equation}{6}{subsubsection.3.1.1}%
+\contentsline {subsubsection}{\numberline {3.1.2}Numerical Solution of the non-linear system}{7}{subsubsection.3.1.2}%
+\contentsline {subsubsection}{\numberline {3.1.3}Verification for the infinite length case}{9}{subsubsection.3.1.3}%
+\contentsline {subsubsection}{\numberline {3.1.4}Method order of accuracy}{10}{subsubsection.3.1.4}%
+\contentsline {subsubsection}{\numberline {3.1.5}Non-Linear Case: SS AISI 316, Aluminium, and Copper}{11}{subsubsection.3.1.5}%
+\contentsline {paragraph}{Required length for the infinite assumption.}{12}{section*.15}%
+\contentsline {section}{\numberline {4}Discussion}{14}{section.4}%
+\contentsline {section}{\numberline {A}Python Source Code}{16}{appendix.A}%
