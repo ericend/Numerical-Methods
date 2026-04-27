@@ -1,5 +1,5 @@
-from pathlib import Path
 from dataclasses import dataclass
+from pathlib import Path
 from typing import Callable
 
 import matplotlib.pyplot as plt
@@ -19,11 +19,11 @@ class NewtonSystemResult:
     Parameters
     ------
     xs : list[np.ndarray]
-        Sequence of iterates x_k ∈ ℝ^n at each step (shape (n,) per iterate).
+        Sequence of iterates x_k  in  R^n at each step (shape (n,) per iterate).
     Fs : list[np.ndarray]
-        Sequence of residual vectors F(x_k) ∈ ℝ^n at each iteration.
+        Sequence of residual vectors F(x_k)  in  R^n at each iteration.
     final_x : np.ndarray
-        Final iterate x_* ∈ ℝ^n returned by the method (last element of xs).
+        Final iterate x_*  in  R^n returned by the method (last element of xs).
     ns : list[int]
         Iteration indices corresponding to each x_k (typically [0, 1, ..., n]).
     """
@@ -47,9 +47,9 @@ def newton_system(
     Newton's method for systems of nonlinear equations.
 
     At each iteration k, solves the linear system
-        JF(x_k) * δ = -F(x_k)
-    for the correction δ, then updates
-        x_{k+1} = x_k + δ,
+        JF(x_k) * delta = -F(x_k)
+    for the correction delta, then updates
+        x_{k+1} = x_k + delta,
     until ||F(x_k)||_2 <= tol or the iteration limit is reached.
 
     Parameters
@@ -59,7 +59,7 @@ def newton_system(
     JF_func : Callable
         Jacobian function JF(x, *jac_args) returning np.ndarray of shape (n, n).
     x0 : np.ndarray
-        Initial guess vector x_0 ∈ ℝ^n (shape (n,)).
+        Initial guess vector x_0  in  R^n (shape (n,)).
     tol : float
         Convergence tolerance on the 2-norm ||F(x_k)||_2.
     max_iter : int
@@ -119,7 +119,7 @@ plt.rcParams.update(
 
 
 def make_A(N: int) -> np.ndarray:
-    """Tridiagonal (N-1) x (N-1) FD matrix with -2 on diagonal, +1 on off-diagonals."""
+    """(N-1) x (N-1) FD matrix with -2 on diagonal, +1 on off-diagonals."""
     n = N - 1
     return (
         np.diag([-2] * n) + np.diag([1] * (n - 1), k=1) + np.diag([1] * (n - 1), k=-1)
@@ -184,7 +184,7 @@ def JF_func(
 
 
 def discrete_2_norm(r_vec: np.ndarray) -> float:
-    """Discrete 2-norm (eq. 16): sqrt(1/(N-1) * sum |r_k|^2)."""
+    """Discrete 2-norm (eq. 17): sqrt(1/(N-1) * sum |r_k|^2)."""
     return np.sqrt(np.sum(r_vec**2) / (len(r_vec) - 1))
 
 
@@ -257,7 +257,7 @@ def run_83() -> None:
     ax1.set_xlabel(r"$x$ (m)")
     ax1.set_ylabel(r"$T(x)$ (K)")
     ax1.set_title(
-        r"Temperature distribution — numerical vs analytical ($\alpha_2 = 0$)"
+        r"Temperature distribution - numerical vs analytical ($\alpha_2 = 0$)"
     )
     ax1.legend(frameon=False)
     fig1.tight_layout()
@@ -366,22 +366,21 @@ def run_84() -> None:
     fig4.savefig(plot_dir / "8_4a_materials.png", bbox_inches="tight")
 
     # ------------- 8.4.b Results -------------
-    tol_frac = 0.01  # e.g. 1% relative error
+    tol_frac = 0.01  # e.g. 1% error
 
     print("\n=== 8.4.b ===")
 
     for mat in materials:
         # Sort lengths to have a clear order
         Ls_sorted = sorted(L_tests)
-        L_ref = Ls_sorted[-1]  # longest length as 'infinite' reference
+        L_ref = Ls_sorted[-1]  # longest length as 'infinite' reference (good enough)
 
         # Reference solution for this material
         result_ref = results_84[mat][L_ref]
         x_ref = grids_84[mat][L_ref]
         T_ref = result_ref.final_x
 
-        # Compute relative 
-        #  error for each shorter length
+        # Compute relative error for each shorter length
         rel_errs = {}
         for L in Ls_sorted[:-1]:  # exclude L_ref
             result_L = results_84[mat][L]
@@ -444,6 +443,7 @@ def main() -> None:
     run_83()
     run_84()
     plt.show()
+
 
 if __name__ == "__main__":
     main()

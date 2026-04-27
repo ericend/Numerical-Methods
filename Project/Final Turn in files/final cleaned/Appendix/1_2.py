@@ -1,18 +1,10 @@
-"""
-SF1546 - Project VT2026
-24/3/2026
-Group 41
-"""
-
-from pathlib import Path
 from dataclasses import dataclass
+from pathlib import Path
 from typing import Callable
-
 
 import matplotlib.pyplot as plt
 import matplotlib.ticker as ticker
 import numpy as np
-
 
 # Plot save directory
 ROOT = Path(__file__).parent
@@ -31,11 +23,11 @@ class NewtonSystemResult:
     Parameters
     ------
     xs : list[np.ndarray]
-        Sequence of iterates x_k ∈ ℝ^n at each step (shape (n,) per iterate).
+        Sequence of iterates x_k  in  R^n at each step (shape (n,) per iterate).
     Fs : list[np.ndarray]
-        Sequence of residual vectors F(x_k) ∈ ℝ^n at each iteration.
+        Sequence of residual vectors F(x_k)  in  R^n at each iteration.
     final_x : np.ndarray
-        Final iterate x_* ∈ ℝ^n returned by the method (last element of xs).
+        Final iterate x_*  in  R^n returned by the method (last element of xs).
     ns : list[int]
         Iteration indices corresponding to each x_k (typically [0, 1, ..., n]).
     """
@@ -59,9 +51,9 @@ def newton_system(
     Newton's method for systems of nonlinear equations.
 
     At each iteration k, solves the linear system
-        JF(x_k) * δ = -F(x_k)
-    for the correction δ, then updates
-        x_{k+1} = x_k + δ,
+        JF(x_k) * delta = -F(x_k)
+    for the correction delta, then updates
+        x_{k+1} = x_k + delta,
     until ||F(x_k)||_2 <= tol or the iteration limit is reached.
 
     Parameters
@@ -71,7 +63,7 @@ def newton_system(
     JF_func : Callable
         Jacobian function JF(x, *jac_args) returning np.ndarray of shape (n, n).
     x0 : np.ndarray
-        Initial guess vector x_0 ∈ ℝ^n (shape (n,)).
+        Initial guess vector x_0  in  R^n (shape (n,)).
     tol : float
         Convergence tolerance on the 2-norm ||F(x_k)||_2.
     max_iter : int
@@ -109,6 +101,7 @@ def newton_system(
 
     return NewtonSystemResult(xs=xs, Fs=Fs, final_x=x, ns=ns)
 
+
 # ============= Model Definition =============
 
 
@@ -134,7 +127,7 @@ def g_d(d: float, Ds: float, ht: float, Rfi: float, kw: float) -> float:
 
 def g_Ds(d: float, Ds: float, ht: float, Rfi: float, kw: float) -> float:
     """
-    ∂g/∂D_s from the report:
+    dg/dD_s from the report:
         g_{D_s} = -d / (D_s^2 h_t) - d R_fi / D_s^2 - d/(2 k_w D_s)
     """
     return -d / (Ds**2 * ht) - d * Rfi / (Ds**2) - d / (2.0 * kw * Ds)
@@ -159,8 +152,8 @@ def F(
     """
     Vector function F(d, Ds) = (F1, F2)^T corresponding to eqs. (F1) and (F2) in eq.(11) in report.
 
-    F1(d, Ds) = g(d, Ds)^(-1) - Q d^{n1-1} / (π K1 Ds^{n1} ΔT_m)
-    F2(d, Ds) = c / (Ds^2 (S_t - d)^2) - ΔP_max
+    F1(d, Ds) = g(d, Ds)^(-1) - Q d^{n1-1} / (pi K1 Ds^{n1} DeltaT_m)
+    F2(d, Ds) = c / (Ds^2 (S_t - d)^2) - DeltaP_max
     """
     d, Ds = x
     g_val = g(d, Ds, ht, Rfi, kw, Rfo, hs)
@@ -190,28 +183,28 @@ def JF(
     """
     Jacobian matrix JF(d, Ds) corresponding to eq. (12) in report:
 
-        JF = [[∂F1/∂d,  ∂F1/∂Ds],
-              [∂F2/∂d,  ∂F2/∂Ds]]
+        JF = [[dF1/dd,  dF1/dDs],
+              [dF2/dd,  dF2/dDs]]
     """
     d, Ds = x
     g_val = g(d, Ds, ht, Rfi, kw, Rfo, hs)
     gd = g_d(d, Ds, ht, Rfi, kw)
     gDs = g_Ds(d, Ds, ht, Rfi, kw)
 
-    # ∂F1/∂d
+    # dF1/dd
     J11 = -gd / (g_val**2) + (n1 - 1.0) * Q * (d ** (n1 - 2.0)) / (
         np.pi * K1 * Ds**n1 * dTm
     )
 
-    # ∂F1/∂Ds
+    # dF1/dDs
     J12 = gDs / (g_val**2) + n1 * Q * d ** (n1 - 1.0) / (
         np.pi * K1 * Ds ** (n1 + 1.0) * dTm
     )
 
-    # ∂F2/∂d
+    # dF2/dd
     J21 = 2.0 * c / (Ds**2 * (S_t - d) ** 3)
 
-    # ∂F2/∂Ds
+    # dF2/dDs
     J22 = -2.0 * c / (Ds**3 * (S_t - d) ** 2)
 
     return np.array([[J11, J12], [J21, J22]], dtype=float)
@@ -371,7 +364,7 @@ def main() -> None:
     ax_res.semilogy(result.ns, residuals, "o-", lw=1.5, ms=5, label="System Newton")
     ax_res.set_xlabel(r"Iteration $k$")
     ax_res.set_ylabel(r"$\|F(x_k)\|_2$")
-    ax_res.set_title(r"Residual norm vs iteration — Newton's method (system)")
+    ax_res.set_title(r"Residual norm vs iteration - Newton's method (system)")
     ax_res.xaxis.set_major_locator(ticker.MultipleLocator(1))
     ax_res.legend(frameon=False)
     fig_res.tight_layout()
@@ -396,7 +389,7 @@ def main() -> None:
     )
     ax_err.set_xlabel(r"Iteration $k$")
     ax_err.set_ylabel(r"$\|x_k - x^*\|_2$")
-    ax_err.set_title(r"Error norm vs iteration — Newton's method (system)")
+    ax_err.set_title(r"Error norm vs iteration - Newton's method (system)")
     ax_err.xaxis.set_major_locator(ticker.MultipleLocator(1))
     ax_err.legend(frameon=False)
     fig_err.tight_layout()
@@ -406,7 +399,7 @@ def main() -> None:
         bbox_inches="tight",
     )
 
-    # ========= Log–log plot of e_{k+1} vs e_k =========
+    # ========= Log-log plot of e_{k+1} vs e_k =========
     fig_ek, ax_ek = plt.subplots(figsize=(6, 4))
     e_k = np.array(errors[:-1])
     e_kp1 = np.array(errors[1:])
@@ -421,9 +414,9 @@ def main() -> None:
     )
     ax_ek.set_xlabel(r"$e_k = \|x_k - x^*\|_2$")
     ax_ek.set_ylabel(r"$e_{k+1} = \|x_{k+1} - x^*\|_2$")
-    ax_ek.set_title(r"Log–log plot of $e_{k+1}$ versus $e_k$")
+    ax_ek.set_title(r"Log-log plot of $e_{k+1}$ versus $e_k$")
 
-    # Reference slopes p = 1 and p = 2 in the log–log plot
+    # Reference slopes p = 1 and p = 2 in the log-log plot
     ref_x = e_k[len(e_k) // 2]  # pick a mid error as reference (must be > 0)
 
     for p_ref, color, label in [

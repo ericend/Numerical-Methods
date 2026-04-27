@@ -1,14 +1,122 @@
+from dataclasses import dataclass
 from pathlib import Path
+from typing import Callable
 
+import matplotlib.pyplot as plt
 import numpy as np
-from utils.methods import newton_system
 
 # ============= Paths =============
 ROOT = Path(__file__).parent
 plot_dir: Path = ROOT / "Plots"
 plot_dir.mkdir(exist_ok=True)
 
+
+@dataclass
+class NewtonSystemResult:
+    """
+    Result container for Newton's method applied to systems of nonlinear equations.
+
+    Parameters
+    ------
+    xs : list[np.ndarray]
+        Sequence of iterates x_k ∈ ℝ^n at each step (shape (n,) per iterate).
+    Fs : list[np.ndarray]
+        Sequence of residual vectors F(x_k) ∈ ℝ^n at each iteration.
+    final_x : np.ndarray
+        Final iterate x_* ∈ ℝ^n returned by the method (last element of xs).
+    ns : list[int]
+        Iteration indices corresponding to each x_k (typically [0, 1, ..., n]).
+    """
+
+    xs: list[np.ndarray]  # iterates x_k
+    Fs: list[np.ndarray]  # F(x_k)
+    final_x: np.ndarray  # x_* at termination
+    ns: list[int]  # iteration indices
+
+
+def newton_system(
+    F_func: Callable,
+    JF_func: Callable,
+    x0: np.ndarray,
+    tol: float,
+    max_iter: int,
+    args: tuple,
+    jac_args: tuple | None = None,
+) -> NewtonSystemResult:
+    """
+    Newton's method for systems of nonlinear equations.
+
+    At each iteration k, solves the linear system
+        JF(x_k) * δ = -F(x_k)
+    for the correction δ, then updates
+        x_{k+1} = x_k + δ,
+    until ||F(x_k)||_2 <= tol or the iteration limit is reached.
+
+    Parameters
+    ----------
+    F_func : Callable
+        Vector-valued function F(x, *args) returning np.ndarray of shape (n,).
+    JF_func : Callable
+        Jacobian function JF(x, *jac_args) returning np.ndarray of shape (n, n).
+    x0 : np.ndarray
+        Initial guess vector x_0 ∈ ℝ^n (shape (n,)).
+    tol : float
+        Convergence tolerance on the 2-norm ||F(x_k)||_2.
+    max_iter : int
+        Maximum allowed number of iterations.
+    args : tuple
+        Additional parameters passed to F_func.
+    jac_args : tuple, optional
+        Additional parameters passed to JF_func. Defaults to args if not provided.
+
+    Returns
+    -------
+    NewtonSystemResult
+    """
+    jac_args = jac_args if jac_args is not None else args
+
+    x = x0.astype(float)
+    xs = [x.copy()]
+    Fx = F_func(x, *args)
+    Fs = [Fx]
+    ns = [0]
+
+    for k in range(max_iter):
+        if np.linalg.norm(Fx, ord=2) <= tol:
+            break
+
+        J = JF_func(x, *jac_args)
+        delta = np.linalg.solve(J, -Fx)
+        x = x + delta
+
+        Fx = F_func(x, *args)
+
+        xs.append(x.copy())
+        Fs.append(Fx)
+        ns.append(k + 1)
+
+    return NewtonSystemResult(xs=xs, Fs=Fs, final_x=x, ns=ns)
+
+
+# [PLOT_START]
+# ============= Plot Setup =============
+plt.style.use("seaborn-v0_8-whitegrid")
+SMALL, MED, BIG = 11, 13, 14
+plt.rcParams.update(
+    {
+        "font.family": "serif",
+        "font.size": MED,
+        "axes.titlesize": BIG,
+        "axes.labelsize": MED,
+        "xtick.labelsize": SMALL,
+        "ytick.labelsize": SMALL,
+        "legend.fontsize": SMALL,
+        "figure.dpi": 500,
+    }
+)
+# [PLOT_END]
 # ============= Model Definition =============
+
 
 def make_A(N: int) -> np.ndarray:
     """Tridiagonal (N-1) x (N-1) FD matrix with -2 on diagonal, +1 on off-diagonals."""
@@ -17,16 +125,20 @@ def make_A(N: int) -> np.ndarray:
         np.diag([-2] * n) + np.diag([1] * (n - 1), k=1) + np.diag([1] * (n - 1), k=-1)
     )
 
+
 def f(T: float, T_inf: float) -> float:
     return T**4 - T_inf**4
 
+
 def f_prime(T: float) -> float:
     return 4 * T**3
+
 
 def interior_grid(N: int, L: float) -> np.ndarray:
     """Interior grid points x_1, ..., x_{N-1}."""
     h = L / N
     return np.linspace(h, L - h, N - 1)
+
 
 def rhs_vector(
     a: float,
@@ -44,6 +156,7 @@ def rhs_vector(
     rhs[-1] -= T_L
     return rhs
 
+
 def F_func(
     T: np.ndarray,
     A: np.ndarray,
@@ -57,6 +170,7 @@ def F_func(
 ) -> np.ndarray:
     return A @ T - rhs_vector(a, b, h, T_s, T_L, T, T_inf, f)
 
+
 def JF_func(
     T: np.ndarray,
     A: np.ndarray,
@@ -68,9 +182,11 @@ def JF_func(
     d = -(h**2) * (a + b * np.vectorize(f_prime)(T))
     return A + np.diag(d)
 
+
 def discrete_2_norm(r_vec: np.ndarray) -> float:
     """Discrete 2-norm (eq. 16): sqrt(1/(N-1) * sum |r_k|^2)."""
     return np.sqrt(np.sum(r_vec**2) / (len(r_vec) - 1))
+
 
 def solve(
     N: int,
@@ -96,7 +212,9 @@ def solve(
     )
     return result, interior_grid(N, L)
 
+
 # ============= 8.3 =============
+
 
 def run_83() -> None:
     # ------------- Parameters (Table 3) -------------
@@ -135,11 +253,11 @@ def run_83() -> None:
 
     fig1, ax1 = plt.subplots(figsize=(7, 4))
     ax1.plot(x_grid, T_num, lw=1.5, label=f"Numerical (FD, N={N_main})")
-    ax1.plot(x_grid, T_exact, lw=1.0, linestyle="--", label="Analytical (eq. 17)")
+    ax1.plot(x_grid, T_exact, lw=1.0, linestyle="--", label="Analytical (eq. 16)")
     ax1.set_xlabel(r"$x$ (m)")
     ax1.set_ylabel(r"$T(x)$ (K)")
     ax1.set_title(
-        r"Temperature distribution - numerical vs analytical ($\alpha_2 = 0$)"
+        r"Temperature distribution — numerical vs analytical ($\alpha_2 = 0$)"
     )
     ax1.legend(frameon=False)
     fig1.tight_layout()
@@ -187,7 +305,9 @@ def run_83() -> None:
     fig3.tight_layout()
     fig3.savefig(plot_dir / "8_3b_convergence.png", bbox_inches="tight")
 
+
 # ============= 8.4 =============
+
 
 def run_84() -> None:
     # ------------- Parameters (8.4) -------------
@@ -260,7 +380,8 @@ def run_84() -> None:
         x_ref = grids_84[mat][L_ref]
         T_ref = result_ref.final_x
 
-        # Compute relative profile error for each shorter length
+        # Compute relative
+        #  error for each shorter length
         rel_errs = {}
         for L in Ls_sorted[:-1]:  # exclude L_ref
             result_L = results_84[mat][L]
@@ -288,11 +409,42 @@ def run_84() -> None:
             print(f"  {L:>8.2f}  {re:>12.4e}  {'yes' if re < tol_frac else 'no':>10}")
         print(rf"  -> Estimated L_min \approx {L_min} m")
 
+        # [PLOT_START]
+        # Plot profile comparison for this material
+        fig, ax = plt.subplots(figsize=(7, 4))
+        ax.plot(x_ref, T_ref, "k--", lw=1.5, label=f"Reference (L={L_ref:.2f} m)")
+
+        for L in Ls_sorted[:-1]:
+            result_L = results_84[mat][L]
+            x_L = grids_84[mat][L]
+            T_L = result_L.final_x
+            re = rel_errs[L]
+            converged = re < tol_frac
+
+            label = f"L={L:0.2f} m  (err={re:0.2e}){'  conv' if converged else '  div'}"
+            ax.plot(x_L, T_L, lw=1.0, label=label)
+            ax.set_xlim(right=0.4)
+
+        ax.set_xlabel(r"$x$ (m)")
+        ax.set_ylabel(r"$T(x)$ (K)")
+        ax.set_title(f"Finite vs 'infinite' heat sink profiles — {mat}")
+        ax.legend(frameon=False, fontsize=8)
+        fig.tight_layout()
+        fig.savefig(
+            plot_dir / f"8_4b_{mat.replace(' ', '_')}.png",
+            bbox_inches="tight",
+        )
+        # [PLOT_END]
+
+
 # ============= Entry Point =============
+
 
 def main() -> None:
     run_83()
     run_84()
+    plt.show()
+
 
 if __name__ == "__main__":
     main()

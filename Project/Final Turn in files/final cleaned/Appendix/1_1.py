@@ -1,20 +1,11 @@
-"""
-SF1546 - Project VT2026
-24/3/2026
-Group 41
-
-
-"""
-
+from dataclasses import dataclass
 from pathlib import Path
 from typing import Callable
-from dataclasses import dataclass
 
 import matplotlib.pyplot as plt
 import matplotlib.ticker as ticker
 import numpy as np
 import scipy.optimize as opt
-
 
 ROOT = Path(__file__).parent
 plot_dir: Path = ROOT / "Plots"
@@ -27,7 +18,7 @@ results_path.mkdir(exist_ok=True)
 @dataclass
 class NewtonRaphsonResult:
     """
-    Result container for scalar Newton–Raphson iterations.
+    Result container for scalar Newton-Raphson iterations.
 
     Parameters
     ------
@@ -38,7 +29,7 @@ class NewtonRaphsonResult:
     ns : list[int]
         Iteration indices corresponding to each x_k (typically [0, 1, ..., n]).
     deltas : list[float]
-        Step sizes Δx_k = x_{k+1} - x_k (often useful for convergence diagnostics).
+        Step sizes Deltax_k = x_{k+1} - x_k (often useful for convergence diagnostics).
     final_x : float
         Final iterate x_* returned by the method (last element of xs).
     converged : bool
@@ -61,7 +52,7 @@ def NewtonRaphson(
     max_iterations: int,
 ) -> NewtonRaphsonResult:
     """
-    Newton–Raphson method to find a root of a scalar function f starting from x0.
+    Newton-Raphson method to find a root of a scalar function f starting from x0.
 
     Parameters
     ----------
@@ -79,7 +70,7 @@ def NewtonRaphson(
     Returns
     -------
     NewtonRaphsonResult
-        Result container with iterates x_k, residuals f(x_k), step sizes Δx_k,
+        Result container with iterates x_k, residuals f(x_k), step sizes Deltax_k,
         iteration indices, final iterate, and convergence flag.
     """
     ns: list[int] = []
@@ -102,7 +93,7 @@ def NewtonRaphson(
         n += 1
         df = f_prime(x)
         if df == 0:
-            # Derivative zero → Newton step undefined
+            # Derivative zero -> Newton step undefined
             break
 
         x_new = x - fx / df
@@ -190,7 +181,7 @@ def main():
     # ============= Results file =============
     results_file = results_path / "Newton Scalar Results.txt"
     with results_file.open("w", encoding="utf-8") as out:
-        # Header to match system style
+        # Header
         out.write("Newton's Method for Scalar Nonlinear Equation (d)\n")
         out.write("=" * 100 + "\n\n")
 
@@ -200,7 +191,7 @@ def main():
         out.write(f"  |f(d*)| = {ref_residual: .3e}\n")
         out.write(f"  Iterations = {len(ref_result.xs) - 1:d}\n\n")
 
-        # Table header for all starting guesses (similar style to before)
+        # Table header for all starting guesses
         out.write(
             f"{'d0 [mm]':>12}  {'d* [mm]':>22}  {'Iterations':>10}  "
             f"{'p (first)':>10}  {'Scipy d* [mm]':>22}  {'|d* - Scipy|':>15}\n"

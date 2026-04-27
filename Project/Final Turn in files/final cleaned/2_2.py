@@ -1,5 +1,5 @@
-from pathlib import Path
 from dataclasses import dataclass
+from pathlib import Path
 from typing import Callable
 
 import matplotlib.pyplot as plt
@@ -380,7 +380,7 @@ def run_84() -> None:
         x_ref = grids_84[mat][L_ref]
         T_ref = result_ref.final_x
 
-        # Compute relative 
+        # Compute relative
         #  error for each shorter length
         rel_errs = {}
         for L in Ls_sorted[:-1]:  # exclude L_ref
@@ -444,6 +444,7 @@ def main() -> None:
     run_83()
     run_84()
     plt.show()
+
 
 if __name__ == "__main__":
     main()

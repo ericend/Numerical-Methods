@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.29 (TeX Live 2026 - Flatpak) (preloaded format=pdflatex 2026.3.7)  27 APR 2026 15:58
+This is pdfTeX, Version 3.141592653-2.6-1.40.29 (TeX Live 2026 - Flatpak) (preloaded format=pdflatex 2026.3.7)  27 APR 2026 18:08
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -821,13 +821,13 @@ nst
 LaTeX Warning: `!h' float specifier changed to `!ht'.
 
 [6]
-<Plots/outerdim_newton_roots.png, id=221, 419.8887pt x 275.3487pt>
+<Plots/outerdim_newton_roots.png, id=226, 419.8887pt x 275.3487pt>
 File: Plots/outerdim_newton_roots.png Graphic file (type png)
 <use Plots/outerdim_newton_roots.png>
 Package pdftex.def Info: Plots/outerdim_newton_roots.png  used on input line 53
 6.
 (pdftex.def)             Requested size: 232.17242pt x 152.25313pt.
-<Plots/outerdim_newton_convergence.png, id=225, 419.8887pt x 275.3487pt>
+<Plots/outerdim_newton_convergence.png, id=230, 419.8887pt x 275.3487pt>
 File: Plots/outerdim_newton_convergence.png Graphic file (type png)
 <use Plots/outerdim_newton_convergence.png>
 Package pdftex.def Info: Plots/outerdim_newton_convergence.png  used on input l
@@ -837,88 +837,122 @@ ine 545.
 
 LaTeX Warning: `!h' float specifier changed to `!ht'.
 
-<Plots/system_newton_loglog_errors.png, id=233, 419.8887pt x 275.3487pt>
+[7 <./Plots/outerdim_newton_roots.png> <./Plots/outerdim_newton_convergence.png
+>]
+<Plots/system_newton_loglog_errors.png, id=251, 419.8887pt x 275.3487pt>
 File: Plots/system_newton_loglog_errors.png Graphic file (type png)
 <use Plots/system_newton_loglog_errors.png>
 Package pdftex.def Info: Plots/system_newton_loglog_errors.png  used on input l
-ine 599.
+ine 600.
 (pdftex.def)             Requested size: 232.17242pt x 152.25313pt.
-<Plots/system_newton_residuals.png, id=236, 439.1607pt x 275.3487pt>
+<Plots/system_newton_residuals.png, id=254, 439.1607pt x 275.3487pt>
 File: Plots/system_newton_residuals.png Graphic file (type png)
 <use Plots/system_newton_residuals.png>
 Package pdftex.def Info: Plots/system_newton_residuals.png  used on input line 
-606.
+607.
 (pdftex.def)             Requested size: 232.17242pt x 145.56857pt.
-[7 <./Plots/outerdim_newton_roots.png> <./Plots/outerdim_newton_convergence.png
->] [8 <./Plots/system_newton_loglog_errors.png> <./Plots/system_newton_residual
-s.png>]
-<Plots/8_3a_solution.png, id=260, 492.1587pt x 275.3487pt>
+ [8]
+<Plots/8_3a_solution.png, id=267, 492.1587pt x 275.3487pt>
 File: Plots/8_3a_solution.png Graphic file (type png)
 <use Plots/8_3a_solution.png>
-Package pdftex.def Info: Plots/8_3a_solution.png  used on input line 653.
+Package pdftex.def Info: Plots/8_3a_solution.png  used on input line 654.
 (pdftex.def)             Requested size: 314.40001pt x 175.89484pt.
-<Plots/8_3a_error.png, id=263, 492.1587pt x 275.3487pt>
+<Plots/8_3a_error.png, id=270, 492.1587pt x 275.3487pt>
 File: Plots/8_3a_error.png Graphic file (type png)
 <use Plots/8_3a_error.png>
-Package pdftex.def Info: Plots/8_3a_error.png  used on input line 659.
+Package pdftex.def Info: Plots/8_3a_error.png  used on input line 660.
 (pdftex.def)             Requested size: 314.40001pt x 175.89484pt.
- [9] [10 <./Plots/8_3a_solution.png> <./Plots/8_3a_error.png>]
-<Plots/8_3b_convergence.png, id=285, 492.1587pt x 275.3487pt>
+ [9 <./Plots/system_newton_loglog_errors.png> <./Plots/system_newton_residuals.
+png>] [10 <./Plots/8_3a_solution.png> <./Plots/8_3a_error.png>]
+<Plots/8_3b_convergence.png, id=294, 492.1587pt x 275.3487pt>
 File: Plots/8_3b_convergence.png Graphic file (type png)
 <use Plots/8_3b_convergence.png>
-Package pdftex.def Info: Plots/8_3b_convergence.png  used on input line 709.
+Package pdftex.def Info: Plots/8_3b_convergence.png  used on input line 710.
 (pdftex.def)             Requested size: 362.77264pt x 202.96075pt.
  [11 <./Plots/8_3b_convergence.png>]
-<Plots/8_4a_materials.png, id=307, 492.1587pt x 275.3487pt>
+<Plots/8_4a_materials.png, id=315, 492.1587pt x 275.3487pt>
 File: Plots/8_4a_materials.png Graphic file (type png)
 <use Plots/8_4a_materials.png>
-Package pdftex.def Info: Plots/8_4a_materials.png  used on input line 767.
+Package pdftex.def Info: Plots/8_4a_materials.png  used on input line 768.
 (pdftex.def)             Requested size: 348.26233pt x 194.8393pt.
  [12 <./Plots/8_4a_materials.png>]
-<Plots/8_4b_SS_AISI_316.png, id=329, 492.1587pt x 275.3487pt>
+<Plots/8_4b_SS_AISI_316.png, id=338, 492.1587pt x 275.3487pt>
 File: Plots/8_4b_SS_AISI_316.png Graphic file (type png)
 <use Plots/8_4b_SS_AISI_316.png>
-Package pdftex.def Info: Plots/8_4b_SS_AISI_316.png  used on input line 835.
-(pdftex.def)             Requested size: 290.22107pt x 162.37029pt.
-<Plots/8_4b_Aluminium_(Al).png, id=330, 492.1587pt x 275.3487pt>
+Package pdftex.def Info: Plots/8_4b_SS_AISI_316.png  used on input line 838.
+(pdftex.def)             Requested size: 338.58632pt x 189.4278pt.
+<Plots/8_4b_Aluminium_(Al).png, id=339, 492.1587pt x 275.3487pt>
 File: Plots/8_4b_Aluminium_(Al).png Graphic file (type png)
 <use Plots/8_4b_Aluminium_(Al).png>
-Package pdftex.def Info: Plots/8_4b_Aluminium_(Al).png  used on input line 842.
+Package pdftex.def Info: Plots/8_4b_Aluminium_(Al).png  used on input line 846.
 
-(pdftex.def)             Requested size: 290.22107pt x 162.37029pt.
-<Plots/8_4b_Copper_(Cu).png, id=331, 492.1587pt x 275.3487pt>
+(pdftex.def)             Requested size: 338.58632pt x 189.4278pt.
+<Plots/8_4b_Copper_(Cu).png, id=340, 492.1587pt x 275.3487pt>
 File: Plots/8_4b_Copper_(Cu).png Graphic file (type png)
 <use Plots/8_4b_Copper_(Cu).png>
-Package pdftex.def Info: Plots/8_4b_Copper_(Cu).png  used on input line 849.
-(pdftex.def)             Requested size: 290.22107pt x 162.37029pt.
- [13 <./Plots/8_4b_SS_AISI_316.png> <./Plots/8_4b_Aluminium_(Al).png> <./Plots/
-8_4b_Copper_(Cu).png>] [14]
+Package pdftex.def Info: Plots/8_4b_Copper_(Cu).png  used on input line 854.
+(pdftex.def)             Requested size: 338.58632pt x 189.4278pt.
 
-LaTeX Warning: Empty `thebibliography' environment on input line 864.
 
-[15]
+LaTeX Warning: `!h' float specifier changed to `!ht'.
+
+[13]
+
+LaTeX Warning: Text page 14 contains only floats.
+
+[14 <./Plots/8_4b_SS_AISI_316.png> <./Plots/8_4b_Aluminium_(Al).png> <./Plots/8
+_4b_Copper_(Cu).png>] [15]
 Package hyperref Info: bookmark level for unknown lstlisting defaults to 0 on i
-nput line 873.
- (./Code/newton_non_linear_eq.py [16] [17])
-(./Code/newton_non_linear_system.py [18] [19] [20] [21])
-(./Code/finite_diff_newton_sys.py [22] [23] [24] [25] [26])
-(./Code/structures.py [27] [28]) (./Code/methods.py [29] [30] [31] [32]
-[33]) [34] (./main.aux)
+nput line 913.
+ (./Code/1_1.py [16] [17] [18] [19] [20])
+(./Code/1_2.py [21] [22] [23] [24] [25] [26] [27] [28]) (./Code/2_2.py [29]
+[30] [31] [32] [33] [34] [35] [36]
+
+! LaTeX Error: Invalid UTF-8 byte sequence (â\lst@FillFixed@\lst@EC€).
+
+See the LaTeX manual or LaTeX Companion for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.429 ...ite vs 'infinite' heat sink profiles â€” 
+                                                  {mat}")
+The document does not appear to be in UTF-8 encoding.
+Try adding \UseRawInputEncoding as the first line of the file
+or specify an encoding such as \usepackage [latin1]{inputenc}
+in the document preamble.
+Alternatively, save the file in UTF-8 using your editor or another tool
+
+
+! LaTeX Error: Invalid UTF-8 byte "94.
+
+See the LaTeX manual or LaTeX Companion for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.429 ...ite vs 'infinite' heat sink profiles â€” 
+                                                  {mat}")
+The document does not appear to be in UTF-8 encoding.
+Try adding \UseRawInputEncoding as the first line of the file
+or specify an encoding such as \usepackage [latin1]{inputenc}
+in the document preamble.
+Alternatively, save the file in UTF-8 using your editor or another tool
+
+) [37] (./main.aux)
  ***********
 LaTeX2e <2025-11-01>
 L3 programming layer <2026-01-19>
  ***********
 Package rerunfilecheck Info: File `main.out' has not changed.
-(rerunfilecheck)             Checksum: 1D522B088E9C4039B2213AB8641D7C19;3507.
+(rerunfilecheck)             Checksum: 4BB32027538C7282E0C6FA549239298E;3854.
  ) 
 Here is how much of TeX's memory you used:
- 22309 strings out of 467525
- 362747 string characters out of 5420560
- 1417146 words of memory out of 5000000
- 49536 multiletter control sequences out of 15000+600000
- 738000 words of font info for 206 fonts, out of 8000000 for 9000
+ 22511 strings out of 467525
+ 365351 string characters out of 5420560
+ 1403146 words of memory out of 5000000
+ 49555 multiletter control sequences out of 15000+600000
+ 739061 words of font info for 218 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 75i,14n,79p,1001b,2612s stack positions out of 10000i,1000n,20000p,200000b,200000s
+ 75i,14n,79p,1001b,2852s stack positions out of 10000i,1000n,20000p,200000b,200000s
 </app/texlive/texmf-dist/fonts/type1/public/lm/lmbx10.pfb></app/texlive/texmf
 -dist/fonts/type1/public/lm/lmbx12.pfb></app/texlive/texmf-dist/fonts/type1/pub
 lic/lm/lmex10.pfb></app/texlive/texmf-dist/fonts/type1/public/lm/lmmi10.pfb></a
@@ -935,10 +969,10 @@ live/texmf-dist/fonts/type1/public/lm/lmsy10.pfb></app/texlive/texmf-dist/fonts
 .pfb></app/texlive/texmf-dist/fonts/type1/public/lm/lmsy8.pfb></app/texlive/tex
 mf-dist/fonts/type1/public/lm/lmsy9.pfb></app/texlive/texmf-dist/fonts/type1/pu
 blic/lm/lmtt10.pfb>
-Output written on main.pdf (35 pages, 2741830 bytes).
+Output written on main.pdf (38 pages, 2764957 bytes).
 PDF statistics:
- 1870 PDF objects out of 2073 (max. 8388607)
- 1734 compressed objects within 18 object streams
- 1195 named destinations out of 1200 (max. 500000)
- 62656 words of extra memory for PDF output out of 74296 (max. 10000000)
+ 2091 PDF objects out of 2487 (max. 8388607)
+ 1948 compressed objects within 20 object streams
+ 1360 named destinations out of 1440 (max. 500000)
+ 62664 words of extra memory for PDF output out of 74296 (max. 10000000)
 

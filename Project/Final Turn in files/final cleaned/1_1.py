@@ -1,20 +1,11 @@
-"""
-SF1546 - Project VT2026
-24/3/2026
-Group 41
-
-
-"""
-
+from dataclasses import dataclass
 from pathlib import Path
 from typing import Callable
-from dataclasses import dataclass
 
 import matplotlib.pyplot as plt
 import matplotlib.ticker as ticker
 import numpy as np
 import scipy.optimize as opt
-
 
 ROOT = Path(__file__).parent
 plot_dir: Path = ROOT / "Plots"
@@ -27,7 +18,7 @@ results_path.mkdir(exist_ok=True)
 @dataclass
 class NewtonRaphsonResult:
     """
-    Result container for scalar Newton–Raphson iterations.
+    Result container for scalar Newton-Raphson iterations.
 
     Parameters
     ------
@@ -200,7 +191,7 @@ def main():
         out.write(f"  |f(d*)| = {ref_residual: .3e}\n")
         out.write(f"  Iterations = {len(ref_result.xs) - 1:d}\n\n")
 
-        # Table header for all starting guesses (similar style to before)
+        # Table header for all starting guesses
         out.write(
             f"{'d0 [mm]':>12}  {'d* [mm]':>22}  {'Iterations':>10}  "
             f"{'p (first)':>10}  {'Scipy d* [mm]':>22}  {'|d* - Scipy|':>15}\n"

@@ -6,15 +6,15 @@
 \providecommand\HyField@AuxAddToCoFields[2]{}
 \babel@aux{english}{}
 \@writefile{toc}{\contentsline {section}{\numberline {1}Introduction}{2}{section.1}\protected@file@percent }
-\@writefile{toc}{\contentsline {section}{\numberline {2}Method}{2}{section.2}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {2}Mathematical Model and Numerical Methods}{2}{section.2}\protected@file@percent }
 \@writefile{toc}{\contentsline {subsection}{\numberline {2.1}Part 1 -- Heat Exchanger}{2}{subsection.2.1}\protected@file@percent }
 \newlabel{eq:Q}{{1}{2}{Part 1 -- Heat Exchanger}{equation.1}{}}
 \newlabel{eq:Q@cref}{{[equation][1][]1}{[1][2][]2}{}{}{}}
 \newlabel{eq:Uf}{{2}{2}{Part 1 -- Heat Exchanger}{equation.2}{}}
 \newlabel{eq:Uf@cref}{{[equation][2][]2}{[1][2][]2}{}{}{}}
-\@writefile{lot}{\contentsline {table}{\numberline {1}{\ignorespaces Parameter values.}}{2}{table.caption.2}\protected@file@percent }
+\@writefile{lot}{\contentsline {table}{\numberline {1}{\ignorespaces Material and Thermodynamic Parameter values.}}{2}{table.caption.2}\protected@file@percent }
 \providecommand*\caption@xref[2]{\@setref\relax\@undefined{#1}}
-\newlabel{tab:params1}{{1}{2}{Parameter values}{table.caption.2}{}}
+\newlabel{tab:params1}{{1}{2}{Material and Thermodynamic Parameter values}{table.caption.2}{}}
 \newlabel{tab:params1@cref}{{[table][1][]1}{[1][2][]2}{}{}{}}
 \@writefile{toc}{\contentsline {subsubsection}{\numberline {2.1.1}Newton's Method for a Non-Linear Equation}{3}{subsubsection.2.1.1}\protected@file@percent }
 \@writefile{loa}{\contentsline {algorithm}{\numberline {1}{\ignorespaces Newton's method -- scalar equation}}{3}{algorithm.1}\protected@file@percent }
@@ -67,85 +67,83 @@
 \newlabel{fig:convergence}{{2}{7}{Residual $|d_k - d^*|$ versus iteration $k$ for different starting guesses with Newton's method . See \cref {lst:NM-eq} \textit {"Order of Convergence"} section for implementation}{figure.caption.5}{}}
 \newlabel{fig:convergence@cref}{{[figure][2][]2}{[1][7][]7}{}{}{}}
 \@writefile{toc}{\contentsline {subsubsection}{\numberline {3.1.2}Numerical Solution of the non-linear system}{7}{subsubsection.3.1.2}\protected@file@percent }
-\@writefile{lot}{\contentsline {table}{\numberline {4}{\ignorespaces Newton's Method for Nonlinear System $(d, D_s)$}}{8}{table.caption.6}\protected@file@percent }
-\newlabel{tab:newton_sys:results}{{4}{8}{Newton's Method for Nonlinear System $(d, D_s)$}{table.caption.6}{}}
+\@writefile{lot}{\contentsline {table}{\numberline {4}{\ignorespaces Convergence results for the nonlinear system of equations solved using Newton's method as defined in \cref  {alg:newton_system}. The table displays the iterates $(d_k, D_{s,k})$, the $2$-norm of the residual vector $\lVert \mathbf  {F}(\mathbf  {x}_k) \rVert _2$, the error relative to the final solution $\lVert \mathbf  {x}_k - \mathbf  {x}^* \rVert _2$, and the observed order of convergence $p_k$. See \cref  {lst:NM-sys} for the corresponding Python implementation.}}{8}{table.caption.6}\protected@file@percent }
+\newlabel{tab:newton_sys:results}{{4}{8}{Convergence results for the nonlinear system of equations solved using Newton's method as defined in \cref {alg:newton_system}. The table displays the iterates $(d_k, D_{s,k})$, the $2$-norm of the residual vector $\lVert \mathbf {F}(\mathbf {x}_k) \rVert _2$, the error relative to the final solution $\lVert \mathbf {x}_k - \mathbf {x}^* \rVert _2$, and the observed order of convergence $p_k$. See \cref {lst:NM-sys} for the corresponding Python implementation}{table.caption.6}{}}
 \newlabel{tab:newton_sys:results@cref}{{[table][4][]4}{[1][7][]8}{}{}{}}
-\@writefile{lof}{\contentsline {figure}{\numberline {3}{\ignorespaces See \cref  {lst:NM-sys} for the implementation.}}{8}{figure.caption.7}\protected@file@percent }
-\newlabel{fig:NM.sys_loglog}{{3}{8}{See \cref {lst:NM-sys} for the implementation}{figure.caption.7}{}}
-\newlabel{fig:NM.sys_loglog@cref}{{[figure][3][]3}{[1][7][]8}{}{}{}}
-\@writefile{lof}{\contentsline {figure}{\numberline {4}{\ignorespaces Residual $|x_k - x^*|$ versus iteration $k$ for Newton's method. See \cref  {lst:NM-sys} \textit  {"Order of Convergence"} section for implementation.}}{8}{figure.caption.7}\protected@file@percent }
-\newlabel{fig:convergence2}{{4}{8}{Residual $|x_k - x^*|$ versus iteration $k$ for Newton's method. See \cref {lst:NM-sys} \textit {"Order of Convergence"} section for implementation}{figure.caption.7}{}}
-\newlabel{fig:convergence2@cref}{{[figure][4][]4}{[1][7][]8}{}{}{}}
-\@writefile{toc}{\contentsline {subsubsection}{\numberline {3.1.3}Verification for the infinite length case}{9}{subsubsection.3.1.3}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {3}{\ignorespaces Convergence evolution of the Newton system, showing the error at the next iteration, $\lVert \mathbf  {x}_{k+1} - \mathbf  {x}^* \rVert _2$, as a function of the current error, $\lVert \mathbf  {x}_k - \mathbf  {x}^* \rVert _2$ illustrating linear convergence. See \cref  {lst:NM-sys} for the implementation.}}{9}{figure.caption.7}\protected@file@percent }
+\newlabel{fig:NM.sys_loglog}{{3}{9}{Convergence evolution of the Newton system, showing the error at the next iteration, $\lVert \mathbf {x}_{k+1} - \mathbf {x}^* \rVert _2$, as a function of the current error, $\lVert \mathbf {x}_k - \mathbf {x}^* \rVert _2$ illustrating linear convergence. See \cref {lst:NM-sys} for the implementation}{figure.caption.7}{}}
+\newlabel{fig:NM.sys_loglog@cref}{{[figure][3][]3}{[1][8][]9}{}{}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {4}{\ignorespaces Residual $|x_k - x^*|$ versus iteration $k$ for Newton's method. See \cref  {lst:NM-sys} \textit  {"Order of Convergence"} section for implementation.}}{9}{figure.caption.7}\protected@file@percent }
+\newlabel{fig:convergence2}{{4}{9}{Residual $|x_k - x^*|$ versus iteration $k$ for Newton's method. See \cref {lst:NM-sys} \textit {"Order of Convergence"} section for implementation}{figure.caption.7}{}}
+\newlabel{fig:convergence2@cref}{{[figure][4][]4}{[1][8][]9}{}{}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.2}Part 2 - Heat Sinks}{9}{subsection.3.2}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {3.2.1}Verification for the infinite length case}{9}{subsubsection.3.2.1}\protected@file@percent }
 \newlabel{eq:infty-analytical}{{16}{9}{Verification for the infinite length case}{equation.16}{}}
 \newlabel{eq:infty-analytical@cref}{{[equation][16][]16}{[1][9][]9}{}{}{}}
-\@writefile{lot}{\contentsline {table}{\numberline {5}{\ignorespaces Heat Sink parameter values for implementation test.}}{9}{table.caption.9}\protected@file@percent }
-\newlabel{tab:3}{{5}{9}{Heat Sink parameter values for implementation test}{table.caption.9}{}}
+\@writefile{lot}{\contentsline {table}{\numberline {5}{\ignorespaces Heat Sink parameter values for implementation test.}}{9}{table.caption.8}\protected@file@percent }
+\newlabel{tab:3}{{5}{9}{Heat Sink parameter values for implementation test}{table.caption.8}{}}
 \newlabel{tab:3@cref}{{[table][5][]5}{[1][9][]9}{}{}{}}
-\@writefile{lof}{\contentsline {figure}{\numberline {5}{\ignorespaces Temperature distribution of our approximate Newton solution compared to the analytical case \cref  {eq:infty-analytical}}}{10}{figure.caption.10}\protected@file@percent }
-\newlabel{fig:heatsink-inftyT}{{5}{10}{Temperature distribution of our approximate Newton solution compared to the analytical case \cref {eq:infty-analytical}}{figure.caption.10}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {5}{\ignorespaces Temperature distribution of approximate Newton solution compared to the analytical case \cref  {eq:infty-analytical} showing convergence.}}{10}{figure.caption.9}\protected@file@percent }
+\newlabel{fig:heatsink-inftyT}{{5}{10}{Temperature distribution of approximate Newton solution compared to the analytical case \cref {eq:infty-analytical} showing convergence}{figure.caption.9}{}}
 \newlabel{fig:heatsink-inftyT@cref}{{[figure][5][]5}{[1][9][]10}{}{}{}}
-\@writefile{lof}{\contentsline {figure}{\numberline {6}{\ignorespaces Pointwise error of our approximate Newton solution compared to the analytical case \cref  {eq:infty-analytical}.}}{10}{figure.caption.10}\protected@file@percent }
-\newlabel{fig:heatsink-infty error}{{6}{10}{Pointwise error of our approximate Newton solution compared to the analytical case \cref {eq:infty-analytical}}{figure.caption.10}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {6}{\ignorespaces Pointwise error of approximate Newton solution compared to the analytical case \cref  {eq:infty-analytical} showing early discrepancy due to boundary conditions.}}{10}{figure.caption.9}\protected@file@percent }
+\newlabel{fig:heatsink-infty error}{{6}{10}{Pointwise error of approximate Newton solution compared to the analytical case \cref {eq:infty-analytical} showing early discrepancy due to boundary conditions}{figure.caption.9}{}}
 \newlabel{fig:heatsink-infty error@cref}{{[figure][6][]6}{[1][9][]10}{}{}{}}
-\@writefile{toc}{\contentsline {subsubsection}{\numberline {3.1.4}Method order of accuracy}{10}{subsubsection.3.1.4}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {3.2.2}Method order of accuracy}{10}{subsubsection.3.2.2}\protected@file@percent }
 \newlabel{eq:2-norm-error}{{17}{10}{Method order of accuracy}{equation.17}{}}
 \newlabel{eq:2-norm-error@cref}{{[equation][17][]17}{[1][10][]10}{}{}{}}
 \newlabel{eq:order-estimate}{{18}{11}{Method order of accuracy}{equation.18}{}}
 \newlabel{eq:order-estimate@cref}{{[equation][18][]18}{[1][10][]11}{}{}{}}
-\@writefile{lot}{\contentsline {table}{\numberline {6}{\ignorespaces Discrete 2-norm error $e_N$ and estimated order of accuracy $p$ for different number of intervals $N$.}}{11}{table.caption.11}\protected@file@percent }
-\newlabel{tab:order-accuracy}{{6}{11}{Discrete 2-norm error $e_N$ and estimated order of accuracy $p$ for different number of intervals $N$}{table.caption.11}{}}
+\@writefile{lot}{\contentsline {table}{\numberline {6}{\ignorespaces Discrete 2-norm error $e_N$ and estimated order of accuracy $p$ for different number of intervals $N$.}}{11}{table.caption.10}\protected@file@percent }
+\newlabel{tab:order-accuracy}{{6}{11}{Discrete 2-norm error $e_N$ and estimated order of accuracy $p$ for different number of intervals $N$}{table.caption.10}{}}
 \newlabel{tab:order-accuracy@cref}{{[table][6][]6}{[1][11][]11}{}{}{}}
-\@writefile{lof}{\contentsline {figure}{\numberline {7}{\ignorespaces Discrete 2-norm error as a function of N.}}{11}{figure.caption.12}\protected@file@percent }
-\newlabel{fig:8.3b-convergence}{{7}{11}{Discrete 2-norm error as a function of N}{figure.caption.12}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {7}{\ignorespaces Discrete 2-norm error as a function of N showing $N^{-2}$ proportionality.}}{11}{figure.caption.11}\protected@file@percent }
+\newlabel{fig:8.3b-convergence}{{7}{11}{Discrete 2-norm error as a function of N showing $N^{-2}$ proportionality}{figure.caption.11}{}}
 \newlabel{fig:8.3b-convergence@cref}{{[figure][7][]7}{[1][11][]11}{}{}{}}
-\@writefile{toc}{\contentsline {subsubsection}{\numberline {3.1.5}Non-Linear Case: SS AISI 316, Aluminium, and Copper}{11}{subsubsection.3.1.5}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {3.2.3}Non-Linear Case: SS AISI 316, Aluminium, and Copper}{11}{subsubsection.3.2.3}\protected@file@percent }
 \newlabel{eq:alpha12}{{19}{11}{Non-Linear Case: SS AISI 316, Aluminium, and Copper}{equation.19}{}}
 \newlabel{eq:alpha12@cref}{{[equation][19][]19}{[1][11][]11}{}{}{}}
-\@writefile{lot}{\contentsline {table}{\numberline {7}{\ignorespaces Material parameters and computed coefficients.}}{12}{table.caption.13}\protected@file@percent }
-\newlabel{tab:materials}{{7}{12}{Material parameters and computed coefficients}{table.caption.13}{}}
+\@writefile{lot}{\contentsline {table}{\numberline {7}{\ignorespaces Material parameters and computed coefficients.}}{12}{table.caption.12}\protected@file@percent }
+\newlabel{tab:materials}{{7}{12}{Material parameters and computed coefficients}{table.caption.12}{}}
 \newlabel{tab:materials@cref}{{[table][7][]7}{[1][11][]12}{}{}{}}
-\@writefile{lof}{\contentsline {figure}{\numberline {8}{\ignorespaces Temperature distribution $T(x)$ along the heat sink for three materials, with ($\alpha _2 \neq  0$), $N=400$.}}{12}{figure.caption.14}\protected@file@percent }
-\newlabel{fig:84a-Tx}{{8}{12}{Temperature distribution $T(x)$ along the heat sink for three materials, with ($\alpha _2 \neq 0$), $N=400$}{figure.caption.14}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {8}{\ignorespaces Temperature distribution $T(x)$ along the heat sink for three materials, with ($\alpha _2 \neq  0$), $N=400$.}}{12}{figure.caption.13}\protected@file@percent }
+\newlabel{fig:84a-Tx}{{8}{12}{Temperature distribution $T(x)$ along the heat sink for three materials, with ($\alpha _2 \neq 0$), $N=400$}{figure.caption.13}{}}
 \newlabel{fig:84a-Tx@cref}{{[figure][8][]8}{[1][12][]12}{}{}{}}
-\@writefile{toc}{\contentsline {paragraph}{Required length for the infinite assumption.}{12}{section*.15}\protected@file@percent }
-\newlabel{eq:infinite-criterion}{{20}{12}{Required length for the infinite assumption}{equation.20}{}}
-\newlabel{eq:infinite-criterion@cref}{{[equation][20][]20}{[1][12][]12}{}{}{}}
-\@writefile{lot}{\contentsline {table}{\numberline {8}{\ignorespaces Minimum length for the infinite-length assumption to hold ($< 1\%$ error at the tip).}}{12}{table.caption.16}\protected@file@percent }
-\newlabel{tab:infinite-length}{{8}{12}{Minimum length for the infinite-length assumption to hold ($< 1\%$ error at the tip)}{table.caption.16}{}}
-\newlabel{tab:infinite-length@cref}{{[table][8][]8}{[1][12][]12}{}{}{}}
-\newlabel{fig:T_SS}{{9a}{13}{SS AISI 316}{figure.caption.17}{}}
-\newlabel{fig:T_SS@cref}{{[subfigure][1][9]9a}{[1][13][]13}{}{}{}}
-\newlabel{sub@fig:T_SS}{{a}{13}{SS AISI 316}{figure.caption.17}{}}
-\newlabel{sub@fig:T_SS@cref}{{[subfigure][1][9]9a}{[1][13][]13}{}{}{}}
-\newlabel{fig:T_Al}{{9b}{13}{Aluminium}{figure.caption.17}{}}
-\newlabel{fig:T_Al@cref}{{[subfigure][2][9]9b}{[1][13][]13}{}{}{}}
-\newlabel{sub@fig:T_Al}{{b}{13}{Aluminium}{figure.caption.17}{}}
-\newlabel{sub@fig:T_Al@cref}{{[subfigure][2][9]9b}{[1][13][]13}{}{}{}}
-\newlabel{fig:T_Cu}{{9c}{13}{Copper}{figure.caption.17}{}}
-\newlabel{fig:T_Cu@cref}{{[subfigure][3][9]9c}{[1][13][]13}{}{}{}}
-\newlabel{sub@fig:T_Cu}{{c}{13}{Copper}{figure.caption.17}{}}
-\newlabel{sub@fig:T_Cu@cref}{{[subfigure][3][9]9c}{[1][13][]13}{}{}{}}
-\@writefile{lof}{\contentsline {figure}{\numberline {9}{\ignorespaces Temperature distribution \(T(x)\) for different materials.}}{13}{figure.caption.17}\protected@file@percent }
-\newlabel{fig:T_materials}{{9}{13}{Temperature distribution \(T(x)\) for different materials}{figure.caption.17}{}}
-\newlabel{fig:T_materials@cref}{{[figure][9][]9}{[1][13][]13}{}{}{}}
-\@writefile{toc}{\contentsline {section}{\numberline {4}Discussion}{14}{section.4}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{Required length for the infinite assumption.}{12}{section*.14}\protected@file@percent }
+\newlabel{eq:infinite-criterion}{{21}{12}{Required length for the infinite assumption}{equation.21}{}}
+\newlabel{eq:infinite-criterion@cref}{{[equation][21][]21}{[1][12][]12}{}{}{}}
+\@writefile{lot}{\contentsline {table}{\numberline {8}{\ignorespaces Minimum length for the infinite-length assumption to hold ($< 1\%$ error at the tip).}}{13}{table.caption.15}\protected@file@percent }
+\newlabel{tab:infinite-length}{{8}{13}{Minimum length for the infinite-length assumption to hold ($< 1\%$ error at the tip)}{table.caption.15}{}}
+\newlabel{tab:infinite-length@cref}{{[table][8][]8}{[1][12][]13}{}{}{}}
+\newlabel{fig:T_SS}{{9a}{14}{SS AISI 316}{figure.caption.16}{}}
+\newlabel{fig:T_SS@cref}{{[subfigure][1][9]9a}{[1][13][]14}{}{}{}}
+\newlabel{sub@fig:T_SS}{{a}{14}{SS AISI 316}{figure.caption.16}{}}
+\newlabel{sub@fig:T_SS@cref}{{[subfigure][1][9]9a}{[1][13][]14}{}{}{}}
+\newlabel{fig:T_Al}{{9b}{14}{Aluminium}{figure.caption.16}{}}
+\newlabel{fig:T_Al@cref}{{[subfigure][2][9]9b}{[1][13][]14}{}{}{}}
+\newlabel{sub@fig:T_Al}{{b}{14}{Aluminium}{figure.caption.16}{}}
+\newlabel{sub@fig:T_Al@cref}{{[subfigure][2][9]9b}{[1][13][]14}{}{}{}}
+\newlabel{fig:T_Cu}{{9c}{14}{Copper}{figure.caption.16}{}}
+\newlabel{fig:T_Cu@cref}{{[subfigure][3][9]9c}{[1][13][]14}{}{}{}}
+\newlabel{sub@fig:T_Cu}{{c}{14}{Copper}{figure.caption.16}{}}
+\newlabel{sub@fig:T_Cu@cref}{{[subfigure][3][9]9c}{[1][13][]14}{}{}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {9}{\ignorespaces Temperature distribution \(T(x)\) for AISI316, Aluminium and Copper, illustrating how the temperature distribution for different lengths of the heat sink diverges or converges with the infinite-length approximation.}}{14}{figure.caption.16}\protected@file@percent }
+\newlabel{fig:T_materials}{{9}{14}{Temperature distribution \(T(x)\) for AISI316, Aluminium and Copper, illustrating how the temperature distribution for different lengths of the heat sink diverges or converges with the infinite-length approximation}{figure.caption.16}{}}
+\newlabel{fig:T_materials@cref}{{[figure][9][]9}{[1][13][]14}{}{}{}}
+\bibcite{ali-kara}{1}
+\bibcite{incropera}{2}
+\bibcite{sauer}{3}
+\@writefile{toc}{\contentsline {section}{\numberline {4}Discussion}{15}{section.4}\protected@file@percent }
 \@writefile{toc}{\contentsline {section}{\numberline {A}Python Source Code}{16}{appendix.A}\protected@file@percent }
 \newlabel{app:code}{{A}{16}{Python Source Code}{appendix.A}{}}
 \newlabel{app:code@cref}{{[section][1][]A}{[1][16][]16}{}{}{}}
 \newlabel{lst:NM-eq}{{1}{16}{Heat Exchanger -- Newton's Method for non-linear equation}{lstlisting.1}{}}
 \newlabel{lst:NM-eq@cref}{{[listing][1][]1}{[1][16][]16}{}{}{}}
 \@writefile{lol}{\contentsline {lstlisting}{\numberline {1}{\ignorespaces Heat Exchanger -- Newton's Method for non-linear equation}}{16}{lstlisting.1}\protected@file@percent }
-\newlabel{lst:NM-sys}{{2}{18}{Heat Exchanger -- Newton's Method for non-linear system}{lstlisting.2}{}}
-\newlabel{lst:NM-sys@cref}{{[listing][2][]2}{[1][18][]18}{}{}{}}
-\@writefile{lol}{\contentsline {lstlisting}{\numberline {2}{\ignorespaces Heat Exchanger -- Newton's Method for non-linear system}}{18}{lstlisting.2}\protected@file@percent }
-\newlabel{lst:heatsinks}{{3}{22}{Heat Sink -- Newton's Method for non-linear system}{lstlisting.3}{}}
-\newlabel{lst:heatsinks@cref}{{[listing][3][]3}{[1][22][]22}{}{}{}}
-\@writefile{lol}{\contentsline {lstlisting}{\numberline {3}{\ignorespaces Heat Sink -- Newton's Method for non-linear system}}{22}{lstlisting.3}\protected@file@percent }
-\newlabel{lst:structs}{{4}{27}{Structures}{lstlisting.4}{}}
-\newlabel{lst:structs@cref}{{[listing][4][]4}{[1][27][]27}{}{}{}}
-\@writefile{lol}{\contentsline {lstlisting}{\numberline {4}{\ignorespaces Structures}}{27}{lstlisting.4}\protected@file@percent }
-\newlabel{lst:methods}{{5}{29}{Methods}{lstlisting.5}{}}
-\newlabel{lst:methods@cref}{{[listing][5][]5}{[1][29][]29}{}{}{}}
-\@writefile{lol}{\contentsline {lstlisting}{\numberline {5}{\ignorespaces Methods}}{29}{lstlisting.5}\protected@file@percent }
-\gdef \@abspage@last{35}
+\newlabel{lst:NM-sys}{{2}{21}{Heat Exchanger -- Newton's Method for non-linear system}{lstlisting.2}{}}
+\newlabel{lst:NM-sys@cref}{{[listing][2][]2}{[1][21][]21}{}{}{}}
+\@writefile{lol}{\contentsline {lstlisting}{\numberline {2}{\ignorespaces Heat Exchanger -- Newton's Method for non-linear system}}{21}{lstlisting.2}\protected@file@percent }
+\newlabel{lst:heatsinks}{{3}{29}{Heat Sink -- Newton's Method for non-linear system}{lstlisting.3}{}}
+\newlabel{lst:heatsinks@cref}{{[listing][3][]3}{[1][29][]29}{}{}{}}
+\@writefile{lol}{\contentsline {lstlisting}{\numberline {3}{\ignorespaces Heat Sink -- Newton's Method for non-linear system}}{29}{lstlisting.3}\protected@file@percent }
+\gdef \@abspage@last{38}

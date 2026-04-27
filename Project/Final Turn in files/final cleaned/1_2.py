@@ -4,15 +4,13 @@ SF1546 - Project VT2026
 Group 41
 """
 
-from pathlib import Path
 from dataclasses import dataclass
+from pathlib import Path
 from typing import Callable
-
 
 import matplotlib.pyplot as plt
 import matplotlib.ticker as ticker
 import numpy as np
-
 
 # Plot save directory
 ROOT = Path(__file__).parent
@@ -108,6 +106,7 @@ def newton_system(
         ns.append(k + 1)
 
     return NewtonSystemResult(xs=xs, Fs=Fs, final_x=x, ns=ns)
+
 
 # ============= Model Definition =============
 

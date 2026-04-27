@@ -1,13 +1,10 @@
-"""
-SF1546 - Project VT2026
-24/3/2026
-Group 41
-"""
-
+from dataclasses import dataclass
 from pathlib import Path
+from typing import Callable
 
+import matplotlib.pyplot as plt
+import matplotlib.ticker as ticker
 import numpy as np
-from utils.methods import newton_system
 
 # Plot save directory
 ROOT = Path(__file__).parent
@@ -17,7 +14,96 @@ plot_dir.mkdir(exist_ok=True)
 results_path: Path = ROOT / "Results"
 results_path.mkdir(exist_ok=True)
 
+
+@dataclass
+class NewtonSystemResult:
+    """
+    Result container for Newton's method applied to systems of nonlinear equations.
+
+    Parameters
+    ------
+    xs : list[np.ndarray]
+        Sequence of iterates x_k  in  R^n at each step (shape (n,) per iterate).
+    Fs : list[np.ndarray]
+        Sequence of residual vectors F(x_k)  in  R^n at each iteration.
+    final_x : np.ndarray
+        Final iterate x_*  in  R^n returned by the method (last element of xs).
+    ns : list[int]
+        Iteration indices corresponding to each x_k (typically [0, 1, ..., n]).
+    """
+
+    xs: list[np.ndarray]  # iterates x_k
+    Fs: list[np.ndarray]  # F(x_k)
+    final_x: np.ndarray  # x_* at termination
+    ns: list[int]  # iteration indices
+
+
+def newton_system(
+    F_func: Callable,
+    JF_func: Callable,
+    x0: np.ndarray,
+    tol: float,
+    max_iter: int,
+    args: tuple,
+    jac_args: tuple | None = None,
+) -> NewtonSystemResult:
+    """
+    Newton's method for systems of nonlinear equations.
+
+    At each iteration k, solves the linear system
+        JF(x_k) * delta = -F(x_k)
+    for the correction delta, then updates
+        x_{k+1} = x_k + delta,
+    until ||F(x_k)||_2 <= tol or the iteration limit is reached.
+
+    Parameters
+    ----------
+    F_func : Callable
+        Vector-valued function F(x, *args) returning np.ndarray of shape (n,).
+    JF_func : Callable
+        Jacobian function JF(x, *jac_args) returning np.ndarray of shape (n, n).
+    x0 : np.ndarray
+        Initial guess vector x_0  in  R^n (shape (n,)).
+    tol : float
+        Convergence tolerance on the 2-norm ||F(x_k)||_2.
+    max_iter : int
+        Maximum allowed number of iterations.
+    args : tuple
+        Additional parameters passed to F_func.
+    jac_args : tuple, optional
+        Additional parameters passed to JF_func. Defaults to args if not provided.
+
+    Returns
+    -------
+    NewtonSystemResult
+    """
+    jac_args = jac_args if jac_args is not None else args
+
+    x = x0.astype(float)
+    xs = [x.copy()]
+    Fx = F_func(x, *args)
+    Fs = [Fx]
+    ns = [0]
+
+    for k in range(max_iter):
+        if np.linalg.norm(Fx, ord=2) <= tol:
+            break
+
+        J = JF_func(x, *jac_args)
+        delta = np.linalg.solve(J, -Fx)
+        x = x + delta
+
+        Fx = F_func(x, *args)
+
+        xs.append(x.copy())
+        Fs.append(Fx)
+        ns.append(k + 1)
+
+    return NewtonSystemResult(xs=xs, Fs=Fs, final_x=x, ns=ns)
+
+
 # ============= Model Definition =============
+
 
 def g(
     d: float, Ds: float, ht: float, Rfi: float, kw: float, Rfo: float, hs: float
@@ -30,6 +116,7 @@ def g(
         d / (Ds * ht) + d * Rfi / Ds + d * np.log(d / Ds) / (2.0 * kw) + Rfo + 1.0 / hs
     )
 
+
 def g_d(d: float, Ds: float, ht: float, Rfi: float, kw: float) -> float:
     """
     dg/dd from the report:
@@ -37,12 +124,14 @@ def g_d(d: float, Ds: float, ht: float, Rfi: float, kw: float) -> float:
     """
     return 1.0 / (Ds * ht) + Rfi / Ds + (np.log(d / Ds) + 1.0) / (2.0 * kw)
 
+
 def g_Ds(d: float, Ds: float, ht: float, Rfi: float, kw: float) -> float:
     """
     dg/dD_s from the report:
         g_{D_s} = -d / (D_s^2 h_t) - d R_fi / D_s^2 - d/(2 k_w D_s)
     """
     return -d / (Ds**2 * ht) - d * Rfi / (Ds**2) - d / (2.0 * kw * Ds)
+
 
 # Newton Function vector
 def F(
@@ -73,6 +162,7 @@ def F(
     F2 = c / (Ds**2 * (S_t - d) ** 2) - dP_max
 
     return np.array([F1, F2], dtype=float)
+
 
 # Jacobian for Newton Function vector
 def JF(
@@ -119,7 +209,9 @@ def JF(
 
     return np.array([[J11, J12], [J21, J22]], dtype=float)
 
+
 # ============= Main  =============
+
 
 def main() -> None:
     # ------------- Parameters -------------
@@ -248,5 +340,131 @@ def main() -> None:
 
     print(f"Results written to {results_file}")
 
+    # [PLOT_START]
+    # ============= Plot Setup =============
+    plt.style.use("seaborn-v0_8-whitegrid")
+    SMALL, MED, BIG = 11, 13, 14
+    plt.rcParams.update(
+        {
+            "font.family": "serif",
+            "font.size": MED,
+            "axes.titlesize": BIG,
+            "axes.labelsize": MED,
+            "xtick.labelsize": SMALL,
+            "ytick.labelsize": SMALL,
+            "legend.fontsize": SMALL,
+            "figure.dpi": 300,
+        }
+    )
+
+    # ========= 1) Residual norm vs iteration (semilogy) =========
+    fig_res, ax_res = plt.subplots(figsize=(6, 4))
+    residuals = [np.linalg.norm(Fk, ord=2) for Fk in result.Fs]
+
+    ax_res.semilogy(result.ns, residuals, "o-", lw=1.5, ms=5, label="System Newton")
+    ax_res.set_xlabel(r"Iteration $k$")
+    ax_res.set_ylabel(r"$\|F(x_k)\|_2$")
+    ax_res.set_title(r"Residual norm vs iteration - Newton's method (system)")
+    ax_res.xaxis.set_major_locator(ticker.MultipleLocator(1))
+    ax_res.legend(frameon=False)
+    fig_res.tight_layout()
+    fig_res.savefig(
+        plot_dir / "system_newton_residuals.png",
+        dpi=300,
+        bbox_inches="tight",
+    )
+
+    # ========= 2) Error norm vs iteration (semilogy) =========
+    fig_err, ax_err = plt.subplots(figsize=(6, 4))
+    x_star = result.final_x
+    errors = [np.linalg.norm(x_k - x_star, ord=2) for x_k in result.xs]
+
+    ax_err.semilogy(
+        result.ns,
+        errors,
+        "o-",
+        lw=1.5,
+        ms=5,
+        label=r"$e_k = \|x_k - x^*\|_2$",
+    )
+    ax_err.set_xlabel(r"Iteration $k$")
+    ax_err.set_ylabel(r"$\|x_k - x^*\|_2$")
+    ax_err.set_title(r"Error norm vs iteration - Newton's method (system)")
+    ax_err.xaxis.set_major_locator(ticker.MultipleLocator(1))
+    ax_err.legend(frameon=False)
+    fig_err.tight_layout()
+    fig_err.savefig(
+        plot_dir / "system_newton_errors.png",
+        dpi=300,
+        bbox_inches="tight",
+    )
+
+    # ========= Log-log plot of e_{k+1} vs e_k =========
+    fig_ek, ax_ek = plt.subplots(figsize=(6, 4))
+    e_k = np.array(errors[:-1])
+    e_kp1 = np.array(errors[1:])
+
+    ax_ek.loglog(
+        e_k,
+        e_kp1,
+        "o-",
+        lw=1.5,
+        ms=5,
+        label=r"Newton iterates",
+    )
+    ax_ek.set_xlabel(r"$e_k = \|x_k - x^*\|_2$")
+    ax_ek.set_ylabel(r"$e_{k+1} = \|x_{k+1} - x^*\|_2$")
+    ax_ek.set_title(r"Log-log plot of $e_{k+1}$ versus $e_k$")
+
+    # Reference slopes p = 1 and p = 2 in the log-log plot
+    ref_x = e_k[len(e_k) // 2]  # pick a mid error as reference (must be > 0)
+
+    for p_ref, color, label in [
+        (1.0, "gray", r"Reference $e_{k+1} \propto e_k^1$"),
+        (2.0, "black", r"Reference $e_{k+1} \propto e_k^2$"),
+    ]:
+        ref_y = ref_x**p_ref
+        x_line = np.array([ref_x / 10, ref_x * 10])
+        y_line = ref_y * (x_line / ref_x) ** p_ref
+        ax_ek.loglog(
+            x_line,
+            y_line,
+            "--",
+            color=color,
+            lw=1,
+            label=label,
+        )
+
+    ax_ek.legend(frameon=False)
+    fig_ek.tight_layout()
+    fig_ek.savefig(
+        plot_dir / "system_newton_loglog_errors.png",
+        dpi=300,
+        bbox_inches="tight",
+    )
+
+    # ========= Newton Path  =========
+    fig_path, ax_path = plt.subplots(figsize=(6, 4))
+    d_vals = [x[0] for x in result.xs]
+    Ds_vals = [x[1] for x in result.xs]
+
+    ax_path.plot(Ds_vals, d_vals, "o-", ms=5, lw=1.5, label="Newton path")
+    ax_path.plot(Ds_vals[0], d_vals[0], "s", ms=7, label="Initial guess")
+    ax_path.plot(Ds_vals[-1], d_vals[-1], "o", ms=7, label="Final iterate")
+
+    ax_path.set_xlabel(r"$D_s$ (m)")
+    ax_path.set_ylabel(r"$d$ (m)")
+    ax_path.set_title(r"Newton iteration path in $(D_s, d)$-plane")
+    ax_path.legend(frameon=False)
+    fig_path.tight_layout()
+    fig_path.savefig(
+        plot_dir / "system_newton_path.png",
+        dpi=300,
+        bbox_inches="tight",
+    )
+    # [PLOT_END]
+
+
 if __name__ == "__main__":
     main()
+    plt.show()

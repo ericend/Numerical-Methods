@@ -102,7 +102,7 @@
     \toprule
     \textbf{Name} & \textbf{Personal ID} & \textbf{E-mail} \\
     \midrule
-    lastname, firstnamt & 12345 & \texttt{mymail@kth.se} \\
+    Enderborg, Eric & 920816-2637 & \texttt{ericend@kth.se} \\
     \bottomrule
   \end{tabular}
 
@@ -122,10 +122,10 @@ In modern engineering we are often faced with challenges of optimization, whethe
 
 The second part of the report is spent on modelling a one-dimensional heat sink and it's thermal diffusion properties relating to choice of material and size. We show, in a similar way to the heat exchange model, how this boundary value problem can be formulated as a system of equations and solved using finite differences approximation and Newton's Method. The results are compared to a analytical case where simplifications to the model are made such that we can find an analytical solution to the governing equation and calculate an approximate error with which we can determine the models order of accuracy and when this analytical approximation makes sense. Finally we evaluate three materials with different thermal properties and assert a optimal length and choice of material for the heat sink.
 % ══════════════════════════════════════════════════════════════════════════════
-\section{Method}
+\section{Mathematical Model and Numerical Methods}
 \subsection{Part 1 -- Heat Exchanger}
-We are tasked with determining a numerical value of the \textit{maximum} outer
-tube diameter $d$ that simultaneously fulfills the specification of the other
+We are tasked with determining a numerical value of the outer
+tube diameter $d$ that fulfils the specification of the other
 parameters given below. An equation for the heat flux is given by \cref{eq:Q}.
 
 \begin{equation}
@@ -148,7 +148,7 @@ given by
   \right)^{-1}.
   \label{eq:Uf}
 \end{equation}
-Here, $d$ is the outer tube diameter which is as of yet undefined and, $D_s = 1.219\ \mathrm{m}$
+Here, $d$ is the outer tube diameter which is as of yet unknown and, $D_s = 1.219\ \mathrm{m}$
 is the inner shell diameter, $R_{fi}$, $R_{fo}$, $h_s$, $h_t$, $k_w$ are
 material and thermodynamic parameters given in \cref{tab:params1}.
 
@@ -165,7 +165,7 @@ material and thermodynamic parameters given in \cref{tab:params1}.
     $k_w$    & $60$                  & $\dfrac{\mathrm{W}}{\mathrm{m}\,{^\circ}\mathrm{C}}$   \\[6pt]
     \bottomrule
   \end{tabular}
-  \caption{Parameter values.}
+  \caption{Material and Thermodynamic Parameter values.}
   \label{tab:params1}
 \end{table}
 
@@ -236,7 +236,7 @@ We can now assemble the final expression for Newton's Method, the update is give
     \label{eq:newtonsmethod}
 \end{equation}
 
-This is implemented and solved for using the python code in \cref{lst:NM-eq}.
+This is implemented and solves for the unknown $d$ using the python code in \cref{lst:NM-eq}.
 % ══════════════════════════════════════════════════════════════════════════════
 
 \subsubsection{Newton's Method for a Non-linear System of Equations}
@@ -556,7 +556,7 @@ This code produces the results shown in \cref{tab:newton_sys:results}:
 \begin{table}[h!]
 
 \centering
-\caption{Newton's Method for Nonlinear System $(d, D_s)$}
+\caption{Convergence results for the nonlinear system of equations solved using Newton's method as defined in \cref{alg:newton_system}. The table displays the iterates $(d_k, D_{s,k})$, the $2$-norm of the residual vector $\lVert \mathbf{F}(\mathbf{x}_k) \rVert_2$, the error relative to the final solution $\lVert \mathbf{x}_k - \mathbf{x}^* \rVert_2$, and the observed order of convergence $p_k$. See \cref{lst:NM-sys} for the corresponding Python implementation.}
 \label{tab:newton_sys:results}
 \begin{tabular}{cccccc}
 \hline
@@ -592,12 +592,13 @@ This code produces the results shown in \cref{tab:newton_sys:results}:
 
 The method converges on values $d=11.886940\ mm$ and $D_s = 684.475600\ mm$ for the sought after diameters.
 However, in the results we note that the order of convergence is not $p \approx 2$ as expected. Studying \cref{fig:NM.sys_loglog} and \cref{fig:convergence2} we conclude that the convergence appear linear instead of the theoretically expected quadratic behaviour. This is most likely due to the Jacobian being ill conditioned and close to singular near the solution.
+
 \begin{figure}[H]
     \centering
     \begin{minipage}{0.48\linewidth}
         \centering
         \includegraphics[width=\linewidth]{Plots/system_newton_loglog_errors.png}
-        \caption{See \cref{lst:NM-sys} for the implementation.}
+        \caption{Convergence evolution of the Newton system, showing the error at the next iteration, $\lVert \mathbf{x}_{k+1} - \mathbf{x}^* \rVert_2$, as a function of the current error, $\lVert \mathbf{x}_k - \mathbf{x}^* \rVert_2$ illustrating linear convergence. See \cref{lst:NM-sys} for the implementation.}
         \label{fig:NM.sys_loglog}
     \end{minipage}
     \hfill
@@ -610,7 +611,7 @@ However, in the results we note that the order of convergence is not $p \approx 
 \end{figure}
 % ············································································
 
-\subsection*{Part 2 - Heat Sinks}
+\subsection{Part 2 - Heat Sinks}
 \subsubsection{Verification for the infinite length case}
 To get some sense of whether or not our implementation seems reasonable, we test it against a case where the heat sink is so long that at some sufficiently large $x$ we expect the rod to reach ambient temperature $T_\infty$ and where radiative effects are neglected, this case has the analytical solution:
 
@@ -651,13 +652,13 @@ $T_\infty$ & $293$ & $K$ \, (Kelvin) \\
     \begin{minipage}{0.65\linewidth}
         \centering
         \includegraphics[width=\linewidth]{Plots/8_3a_solution.png}
-        \caption{Temperature distribution of our approximate Newton solution compared to the analytical case \cref{eq:infty-analytical}}
+        \caption{Temperature distribution of approximate Newton solution compared to the analytical case \cref{eq:infty-analytical} showing convergence.}
         \label{fig:heatsink-inftyT}
     \end{minipage}
     \begin{minipage}{0.65\linewidth}
         \centering
         \includegraphics[width=\linewidth]{Plots/8_3a_error.png}
-        \caption{Pointwise error of our approximate Newton solution compared to the analytical case \cref{eq:infty-analytical}.}
+        \caption{Pointwise error of approximate Newton solution compared to the analytical case \cref{eq:infty-analytical} showing early discrepancy due to boundary conditions.}
         \label{fig:heatsink-infty error}
     \end{minipage}
     \hfill
@@ -707,7 +708,7 @@ $N$ & $e_N$ & $p$ \\
 \begin{figure}[H]
     \centering
     \includegraphics[width=0.75\linewidth]{Plots/8_3b_convergence.png}
-    \caption{Discrete 2-norm error as a function of N.}
+    \caption{Discrete 2-norm error as a function of N showing $N^{-2}$ proportionality.}
     \label{fig:8.3b-convergence}
 \end{figure}
 
@@ -785,15 +786,18 @@ magnitude smaller than $\alpha_1$.
 The analytical solution for the infinite case (\cref{eq:infty-analytical})
 assumes that the temperature decreases exponentially and to an infinitesimal degree approaches the ambient temperature as $x \to \infty$.
 If we apply a threshold for when we may say that this approximation is valid, e.g when the deviation is less than $1\%$, we get a practical first estimate of a cut-off length:
-
+Let $\theta(L)$ and $\theta(b)$ be the temperature at $x = L$ and $x = 0$ respectively, we assume that:
 \begin{equation}
-	e^{-\sqrt{\alpha_1}\,L} < 0.01
-	\;\Longleftrightarrow\;
-	-\sqrt{\alpha_1}\,L < \ln(0.01)
-	\;\Longleftrightarrow\;
-	L > \frac{-\ln(0.01)}{\sqrt{\alpha_1}} \approx \frac{4.6}{\sqrt{\alpha_1}}.
+	\theta(L) = \theta_b e^{-\sqrt{\alpha_1} L} \implies \frac{\theta(L)}{\theta_b} = e^{-\sqrt{\alpha_1} L}
+\end{equation}
+
+We wish this ratio to be $\leq 1 \%$. Solving for $L$ we get: 
+\begin{equation}
+	L > \frac{-4.605}{-\sqrt{\alpha_1}} \approx \frac{4.6}{\sqrt{\alpha_1}}
 	\label{eq:infinite-criterion}
 \end{equation}
+
+Thus, for a heat sink to satisfy the infinite-length assumption, its length must exceed approximately $4.6/\sqrt{\alpha_1}$.
 
 Applying \cref{eq:infinite-criterion} to each material gives the minimum
 lengths in \cref{tab:infinite-length}.
@@ -824,44 +828,80 @@ Therefore the infinite-length formula \cref{eq:infty-analytical} would underesti
 tip temperature and overestimate the total heat loss for copper heat sinks of this
 length. 
 
-Using \cref{lst:heatsinks} we calculate the full temperature distribution for several lengths for each of the different materials using Newton's Method as described in \cref{solving-the-system}, the results are presented in \cref{fig:T_SS}, \cref{fig:T_Al}, \cref{fig:T_Cu}:
+Using \cref{lst:heatsinks} we calculate the full temperature distribution for several lengths for each of the different materials using Newton's Method as described in \cref{solving-the-system}, the results are presented in \cref{fig:T_SS}, \cref{fig:T_Al}, \cref{fig:T_Cu} and confirm our earlier first estimates that the approximation is valid for all the materials except copper.
 
 
 \begin{figure}[h!]
 	\centering
-	
-	\begin{subfigure}{0.60\linewidth}
+	\begin{subfigure}{0.7\linewidth}
 		\centering
 		\includegraphics[width=\linewidth]{Plots/8_4b_SS_AISI_316.png}
 		\caption{SS AISI 316}
 		\label{fig:T_SS}
 	\end{subfigure}
-	\hfill
-	\begin{subfigure}{0.60\linewidth}
+	
+	\vspace{0.5cm} % Add some breathing room
+	\begin{subfigure}{0.7\linewidth}
 		\centering
 		\includegraphics[width=\linewidth]{Plots/8_4b_Aluminium_(Al).png}
 		\caption{Aluminium}
 		\label{fig:T_Al}
 	\end{subfigure}
-	\hfill
-	\begin{subfigure}{0.60\linewidth}
+	
+	\vspace{0.5cm}
+	\begin{subfigure}{0.7\linewidth}
 		\centering
 		\includegraphics[width=\linewidth]{Plots/8_4b_Copper_(Cu).png}
 		\caption{Copper}
 		\label{fig:T_Cu}
 	\end{subfigure}
 	
-	\caption{Temperature distribution \(T(x)\) for different materials.}
+	\caption{Temperature distribution \(T(x)\) for AISI316, Aluminium and Copper, illustrating how the temperature distribution for different lengths of the heat sink diverges or converges with the infinite-length approximation.}
 	\label{fig:T_materials}
 \end{figure}
+
  
 % ══════════════════════════════════════════════════════════════════════════════
-\section{Discussion}
 \newpage
-% ── References ────────────────────────────────────────────────────────────────
-\begin{thebibliography}{h!}
+\section{Discussion}
 
+The numerical simulations performed in this project demonstrate that Newton’s method is a highly effective tool for solving the non-linear problems associated with thermal design, provided that the initial guesses are chosen within the appropriate local convergence neighbourhoods.
+
+
+In the heat exchanger analysis, we observed that the scalar formulation of the design problem yields two mathematically valid roots for the outer tube diameter $d$. 
+
+
+By choosing the larger of the two roots, we satisfy the requirements while optimizing the design for lower material usage and reduced manufacturing complexity illustrating that careful consideration of the physics of the problem is crucial to be able to choose the final solution. 
+
+
+While the scalar version of the method converges quadratically in most cases, Newton's method for the $(d, D_s)$ pair showed more complex convergence behaviour, likely linked to the poor conditioning of the Jacobian near the solution, highlighting the need for well behaved systems for Newton's Method.
+
+
+For the heat sink analysis, the finite difference approximation was validated through a comparison with an analytical solution for an infinitely long heat sink.
+The error analysis confirmed that the implementation is globally second-order accurate ($\mathcal{O}(h^2)$), as demonstrated by the convergence order $p \approx 2$ observed.
+
+
+Furthermore, the simulation of three distinct materials illustrated that thermal conductivity ($K$) is most likely the dominant factor in heat sink efficiency; materials with low conductivity, such as stainless steel, trap heat near the base, whereas high-conductivity materials like copper disperse heat very effectively making it very effective as a heat sink material.
+
+
+The evaluation of the “infinite length” assumption confirms that this design approximation is valid for stainless steel and aluminium fins of $\approx 0.30$ m length. However, for copper or other high conductivity materials, the resulting model shows insufficient temperature decay at the tip, indicating that the  infinite-length formula would significantly underestimate the actual temperature distribution and is therefore not useful in such cases.
+
+
+These findings highlight the importance of not only choosing the right numerical method but also validating when simplified theoretical models are appropriate for practical engineering applications.
+
+\begin{thebibliography}{9}
+	
+	\bibitem{ali-kara} 
+	Y. Ali Kara, Ö. Güraras, \textit{A computer program for designing of shell-and-tube heat exchangers}, Appl. Therm. Eng. 24, pp. 1797–1805 (2004).
+	
+	\bibitem{incropera} 
+	Frank P. Incropera, David P. Dewitt, Theodore L. Bergman, Andrienne S. Levine, \textit{Principles of Heat and Mass Transfer}, Seventh Edition, 2013 John Wiley \& Sons, pp. 112–228.
+	
+	\bibitem{sauer} 
+	Timothy Sauer, \textit{Numerical Analysis}, Third Edition, 2018 Pearson Education.
+	
 \end{thebibliography}
+
 \newpage
 % ── Appendix ──────────────────────────────────────────────────────────────────
 \appendix
@@ -870,22 +910,14 @@ Using \cref{lst:heatsinks} we calculate the full temperature distribution for se
 
 \subsection*{Heat Exchanger -- Newton's Method for non-linear equation}
 \lstinputlisting[caption={Heat Exchanger -- Newton's Method for non-linear equation},
-                 label={lst:NM-eq}]{Code/newton_non_linear_eq.py}
+                 label={lst:NM-eq}]{Code/1_1.py}
 
 \subsection*{Heat Exchanger -- Newton's Method for non-linear system}
 \lstinputlisting[caption={Heat Exchanger -- Newton's Method for non-linear system},
-                 label={lst:NM-sys}]{Code/newton_non_linear_system.py}
+                 label={lst:NM-sys}]{Code/1_2.py}
 
 \subsection*{Heat Sink -- Newton's Method for non-linear system}
 \lstinputlisting[caption={Heat Sink -- Newton's Method for non-linear system},
-                 label={lst:heatsinks}]{Code/finite_diff_newton_sys.py}
-
-\subsection*{Structures}
-\lstinputlisting[caption={Structures},
-                 label={lst:structs}]{Code/structures.py}
-
-\subsection*{Methods}
-\lstinputlisting[caption={Methods},
-                 label={lst:methods}]{Code/methods.py}
+                 label={lst:heatsinks}]{Code/2_2.py}
 
 \end{document}
