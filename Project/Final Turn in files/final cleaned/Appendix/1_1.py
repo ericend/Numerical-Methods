@@ -135,7 +135,7 @@ def main():
     d_0: float = 0.007  # Reference initial guess
     tolerance: float = 1e-8
 
-    def g(d) -> float:
+    def g(d) -> float: # Corresponds to firs U_f term in eq. (4) in report
         return (
             d / (Ds * ht) + d * Rfi / Ds + d * np.log(d / Ds) / (2 * kw) + Rfo + 1 / hs
         )
@@ -143,7 +143,7 @@ def main():
     def g_prime(d) -> float:
         return 1 / (Ds * ht) + Rfi / Ds + (np.log(d / Ds) + 1) / (2 * kw)
 
-    def f(d) -> float:
+    def f(d) -> float: # Newton function
         return 1 / g(d) - U_f
 
     def f_prime(d) -> float:

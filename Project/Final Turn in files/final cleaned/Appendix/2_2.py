@@ -293,7 +293,9 @@ def run_83() -> None:
 
     fig3, ax3 = plt.subplots(figsize=(7, 4))
     ax3.semilogy(Ns, norms, "o-", lw=1.0, ms=3, label=r"$e_N$")
-    ref = norms[0] * (Ns[0] / np.array(Ns)) ** 2
+    ref = (
+        norms[0] * (Ns[0] / np.array(Ns)) ** 2
+    )  # anchor to first point then decline as 1/N²
     ax3.semilogy(
         Ns, ref, "--", lw=1, color="crimson", label=r"$\mathcal{O}(N^{-2})$ reference"
     )
@@ -366,7 +368,7 @@ def run_84() -> None:
     fig4.savefig(plot_dir / "8_4a_materials.png", bbox_inches="tight")
 
     # ------------- 8.4.b Results -------------
-    tol_frac = 0.01  # e.g. 1% error
+    tol_frac = 0.005  # e.g. 1% error
 
     print("\n=== 8.4.b ===")
 
@@ -442,7 +444,7 @@ def run_84() -> None:
 def main() -> None:
     run_83()
     run_84()
-    plt.show()
+    # plt.show()
 
 
 if __name__ == "__main__":
